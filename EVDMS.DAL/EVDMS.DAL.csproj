@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../EVDMS.Core/EVDMS.Core.csproj" />
+  </ItemGroup>
+
 </Project>
