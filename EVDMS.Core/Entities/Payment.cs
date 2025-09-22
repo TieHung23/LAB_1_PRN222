@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using EVDMS.Core.CommonEntities;
 
 namespace EVDMS.Core.Entities;
 
-public class Payment
+public class Payment : UpdatedCommon
 {
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -26,5 +27,5 @@ public class Payment
 
     public string PaymentMethod { get; set; } = string.Empty;
 
-    public string IsSuccess { get; set; } = string.Empty;
+    public bool IsSuccess { get; set; } = false;
 }

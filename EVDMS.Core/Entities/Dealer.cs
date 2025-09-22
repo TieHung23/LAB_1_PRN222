@@ -1,9 +1,10 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using EVDMS.Core.CommonEntities;
 
 namespace EVDMS.Core.Entities;
 
-public class Dealer
+public class Dealer : UpdatedCommon
 {
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
@@ -23,4 +24,6 @@ public class Dealer
     public bool IsActive { get; set; } = true;
 
     public bool IsDeleted { get; set; } = false;
+
+    public ICollection<Account> Accounts { get; set; } = new List<Account>();
 }

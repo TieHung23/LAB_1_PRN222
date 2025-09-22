@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using EVDMS.Core.Entities;
 
 public class CreatedCommon
@@ -9,5 +10,6 @@ public class CreatedCommon
 
     public Guid CreatedById { get; set; }
 
+    [NotMapped]
     public Account CreatedBy { get; set; } = new();
 }

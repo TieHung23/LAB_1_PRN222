@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace EVDMS.Core.Entities;
 
-public class Order
+public class Order : CreatedCommon
 {
     [Key]
     public Guid Id { get; set; } = Guid.NewGuid();
