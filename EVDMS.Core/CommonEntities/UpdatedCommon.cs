@@ -10,8 +10,8 @@ public class UpdatedCommon : CreatedCommon
 
     public DateTime UpdatedAt { get; set; } = DateTime.Now;
 
-    public Guid UpdatedById { get; set; }
+    public Guid? UpdatedById { get; set; }
 
     [NotMapped]
-    public Account UpdatedBy { get; set; } = new();
+    public Account? UpdatedBy { get; set; }
 }

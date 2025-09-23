@@ -14,7 +14,7 @@ public class Order : CreatedCommon
 
     public Guid InventoryId { get; set; }
 
-    public Guid PromotionId { get; set; }
+    public Guid? PromotionId { get; set; }
 
     public Customer? Customer { get; set; }
 

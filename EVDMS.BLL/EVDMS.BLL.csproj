@@ -11,4 +11,11 @@
     <ProjectReference Include="../EVDMS.DAL/EVDMS.DAL.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs/Request/" />
+    <Folder Include="DTOs/Response/" />
+    <Folder Include="IServices/" />
+    <Folder Include="Services/" />
+  </ItemGroup>
+
 </Project>

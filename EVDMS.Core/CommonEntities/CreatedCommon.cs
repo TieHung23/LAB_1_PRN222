@@ -8,8 +8,8 @@ public class CreatedCommon
 
     public DateTime CreatedAt { get; set; } = DateTime.Now;
 
-    public Guid CreatedById { get; set; }
+    public Guid? CreatedById { get; set; }
 
     [NotMapped]
-    public Account CreatedBy { get; set; } = new();
+    public Account? CreatedBy { get; set; }
 }

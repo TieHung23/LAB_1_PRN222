@@ -20,7 +20,7 @@ public class Account : UpdatedCommon
 
     public bool IsDeleted { get; set; } = false;
 
-    public Guid DealerId { get; set; }
+    public Guid? DealerId { get; set; }
 
     public Guid RoleId { get; set; }
 

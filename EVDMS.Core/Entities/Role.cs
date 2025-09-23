@@ -1,12 +1,14 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using EVDMS.Core.CommonEntities;
 
 namespace EVDMS.Core.Entities;
 
-public class Role : CreatedCommon
+public class Role : UpdatedCommon
 {
     [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
 
     public string Name { get; set; } = string.Empty;
 
