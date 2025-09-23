@@ -22,5 +22,7 @@ public static class AddDependency
     public static void AddRepositories(this IServiceCollection services)
     {
         services.AddScoped<IAccountRepository, AccountRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IDealerRepository, DealerRepository>();
     }
 }

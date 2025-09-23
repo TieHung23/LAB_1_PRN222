@@ -1,0 +1,25 @@
+﻿@{
+    ViewData["Title"] = "Thông tin quyền của tôi";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>Dưới đây là tất cả thông tin (claims) được lưu trong cookie của bạn sau khi đăng nhập.</p>
+
+<table class="table table-bordered">
+    <thead class="thead-light">
+        <tr>
+            <th>Loại (Type)</th>
+            <th>Giá trị (Value)</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in User.Claims)
+        {
+            <tr>
+                <td>@claim.Type</td>
+                <td>@claim.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -9,7 +9,12 @@ namespace EVDMS.DAL.Repositories.Abstractions
 {
     public interface IAccountRepository
     {
-      
+        Task<Account> AddAsync(Account newAccount);
         Task<Account> GetAccountByUsername(string username);
+        Task<IEnumerable<Account>> GetAccounts();
+        Task<Account> GetByIdAsync(Guid id);
+        Task UpdateAsync(Account account);
+        Task DeleteAsync(Account account);
+        Task<Account> GetByIdWithDetailsAsync(Guid id);
     }
 }

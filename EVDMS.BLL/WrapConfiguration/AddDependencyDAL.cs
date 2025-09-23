@@ -23,6 +23,8 @@ public static class AddDependencyDAL
     // Add services
     public static void AddServices(this IServiceCollection services)
     {
+        services.AddScoped<IRoleService, RoleService>();
+        services.AddScoped<IDealerService, DealerService>();
         services.AddScoped<IAccountService, AccountService>();
     }
 }

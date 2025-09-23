@@ -37,5 +37,41 @@ namespace EVDMS.BLL.Services.Implementations
 
             return null; // Mật khẩu sai, đăng nhập thất bại
         }
+        public async Task<IEnumerable<Account>> GetAccounts()
+        {
+            return await _accountRepository.GetAccounts();
+        }
+
+        public async Task<Account> CreateAccountAsync(Account newAccount)
+        {
+          
+            newAccount.HashedPassword = BCrypt.Net.BCrypt.HashPassword(newAccount.HashedPassword);
+            return await _accountRepository.AddAsync(newAccount);
+        }
+
+        public async Task<Account> GetAccountByIdAsync(Guid id)
+        {
+            return await _accountRepository.GetByIdAsync(id);
+        }
+
+        public async Task UpdateAccountAsync(Account account)
+        {
+            
+            await _accountRepository.UpdateAsync(account);
+        }
+
+        public async Task DeleteAccountAsync(Guid id)
+        {
+            var account = await _accountRepository.GetByIdAsync(id);
+            if (account != null)
+            {
+                await _accountRepository.DeleteAsync(account);
+            }
+        }
+        public async Task<Account> GetAccountByIdWithDetailsAsync(Guid id)
+        {
+            return await _accountRepository.GetByIdWithDetailsAsync(id);
+        }
+
     }
 }

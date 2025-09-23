@@ -29,9 +29,10 @@ namespace EVDMS.Presentation.Controllers
             return View();
         }
 
-        // Action để xử lý dữ liệu từ form đăng nhập
+        // Trong file: EVDMS.Presentation/Controllers/AccountController.cs
+
         [HttpPost]
-        [ValidateAntiForgeryToken] // Thêm attribute để chống tấn công CSRF
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (!ModelState.IsValid)
@@ -39,43 +40,46 @@ namespace EVDMS.Presentation.Controllers
                 return View(model);
             }
 
-            // Gọi service để kiểm tra thông tin đăng nhập
             var account = await _accountService.Login(model.UserName, model.Password);
 
             if (account != null)
             {
-                // Tạo các "Claims" - thông tin định danh cho người dùng
-                // Các thông tin này sẽ được mã hóa và lưu trong cookie
                 var claims = new List<Claim>
-                {
-                    new Claim(ClaimTypes.Name, account.FullName),
-                    new Claim("UserName", account.UserName),
-                    new Claim(ClaimTypes.Role, account.Role.Name), // Lấy tên Role từ navigation property
-                    new Claim("AccountId", account.Id.ToString()),
-                    // Nếu DealerId có thể null, cần kiểm tra trước khi thêm claim
-                    new Claim("DealerId", account.DealerId?.ToString() ?? "")
-                };
+        {
+            new Claim(ClaimTypes.Name, account.FullName),
+            new Claim("UserName", account.UserName),
+            new Claim(ClaimTypes.Role, account.Role.Name),
+            new Claim("AccountId", account.Id.ToString()),
+            new Claim("DealerId", account.DealerId?.ToString() ?? "")
+        };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var authProperties = new AuthenticationProperties { };
 
-                var authProperties = new AuthenticationProperties
-                {
-                    // Tùy chọn: Ghi nhớ đăng nhập
-                    // IsPersistent = true, 
-                    // RedirectUri = "/some-local-url"
-                };
-
-                // Thực hiện đăng nhập, tạo cookie xác thực
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                // Chuyển hướng đến trang chủ sau khi đăng nhập thành công
-                return RedirectToAction("Index", "Home");
+                // Kiểm tra vai trò của tài khoản và chuyển hướng tương ứng
+                switch (account.Role.Name)
+                {
+                    case "Admin":
+                    case "EVMStaff":
+                        // Nếu là Admin hoặc EVMStaff, chuyển đến trang quản trị
+                        return RedirectToAction("Index", "AdminDashboard");
+
+                    case "Manager":
+                    case "Staff":
+                        // Nếu là Manager hoặc Staff, chuyển đến trang bán hàng
+                        return RedirectToAction("Index", "SalesDashboard");
+
+                    default:
+                        // Mặc định, chuyển về trang chủ
+                        return RedirectToAction("Index", "Home");
+                }
             }
 
-            // Nếu đăng nhập thất bại, thêm lỗi vào ModelState để hiển thị trên View
             ModelState.AddModelError(string.Empty, "Tên đăng nhập hoặc mật khẩu không chính xác.");
             return View(model);
         }

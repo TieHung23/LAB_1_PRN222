@@ -1,4 +1,4 @@
-using EVDMS.Core.CommonEntities;
+﻿using EVDMS.Core.CommonEntities;
 using EVDMS.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,6 +23,19 @@ public class ApplicationDbContext : DbContext
             property.SetPrecision(18);
             property.SetScale(2);
         }
+        // Cấu hình mối quan hệ: Một Role có nhiều Account
+        modelBuilder.Entity<Role>()
+            .HasMany(r => r.Accounts)
+            .WithOne(a => a.Role)
+            .HasForeignKey(a => a.RoleId)
+            .OnDelete(DeleteBehavior.Restrict); // Ngăn không cho xóa Role nếu vẫn còn Account
+
+        // Cấu hình mối quan hệ: Một Dealer có nhiều Account
+        modelBuilder.Entity<Dealer>()
+            .HasMany(d => d.Accounts)
+            .WithOne(a => a.Dealer)
+            .HasForeignKey(a => a.DealerId)
+            .OnDelete(DeleteBehavior.SetNull); // Nếu xóa Dealer, set DealerId của Account thành null
 
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Customer)

@@ -14,7 +14,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddDatabaseDAL(builder.Configuration);
 
 builder.Services.AddRepositoryDAL();
-
 builder.Services.AddServices();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
@@ -43,7 +42,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

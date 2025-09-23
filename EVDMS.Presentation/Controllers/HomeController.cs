@@ -1,6 +1,7 @@
-using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 using EVDMS.Presentation.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace EVDMS.Presentation.Controllers;
 
@@ -19,6 +20,12 @@ public class HomeController : Controller
     }
 
     public IActionResult Privacy()
+    {
+        return View();
+    }
+
+    [Authorize] 
+    public IActionResult MyClaims()
     {
         return View();
     }
