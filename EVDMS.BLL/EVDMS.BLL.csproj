@@ -6,4 +6,16 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="../EVDMS.Core/EVDMS.Core.csproj" />
+    <ProjectReference Include="../EVDMS.DAL/EVDMS.DAL.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DTOs/Request/" />
+    <Folder Include="DTOs/Response/" />
+    <Folder Include="IServices/" />
+    <Folder Include="Services/" />
+  </ItemGroup>
+
 </Project>
