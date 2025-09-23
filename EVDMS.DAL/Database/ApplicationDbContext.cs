@@ -161,7 +161,7 @@ public class ApplicationDbContext : DbContext
         var vehicleModels = new List<VehicleModel>();
         for (int i = 1; i <= 5; i++)
         {
-            vehicleModels.Add(new VehicleModel { Id = NewGuid(5, i), ModelName = $"Model {i}", Brand = "Tesla", VehicleType = "Sedan", Description = "Description", ReleaseYear = 2022, IsActive = true, IsDeleted = false, VehicleConfigId = vehicleConfigs[i - 1].Id, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId });
+            vehicleModels.Add(new VehicleModel { Id = NewGuid(5, i), ModelName = $"Model {i}", Brand = "Tesla", VehicleType = "Sedan", Description = "Description", ReleaseYear = 2022, IsActive = true, IsDeleted = false, VehicleConfigId = vehicleConfigs[i - 1].Id, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, ImgUrl = "Hahahaha" });
         }
         modelBuilder.Entity<VehicleModel>().HasData(vehicleModels);
 

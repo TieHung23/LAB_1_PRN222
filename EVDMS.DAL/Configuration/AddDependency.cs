@@ -1,5 +1,7 @@
 using System;
 using EVDMS.DAL.Database;
+using EVDMS.DAL.Repositories.Abstractions;
+using EVDMS.DAL.Repositories.Implementations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,5 +16,11 @@ public static class AddDependency
             {
                 options.UseSqlServer(config.GetConnectionString("DefaultConnection"));
             });
+    }
+
+    // Add repo DI here
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        services.AddScoped<IAccountRepository, AccountRepository>();
     }
 }

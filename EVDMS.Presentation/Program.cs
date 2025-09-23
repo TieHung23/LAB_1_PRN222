@@ -13,8 +13,9 @@ builder.Services.AddControllersWithViews();
 // Add BBL DI
 builder.Services.AddDatabaseDAL(builder.Configuration);
 
-builder.Services.AddScoped<IAccountRepository, AccountRepository>();
-builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddRepositoryDAL();
+
+builder.Services.AddServices();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
