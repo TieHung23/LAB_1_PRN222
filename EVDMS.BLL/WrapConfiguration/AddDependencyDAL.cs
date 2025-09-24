@@ -26,5 +26,6 @@ public static class AddDependencyDAL
         services.AddScoped<IRoleService, RoleService>();
         services.AddScoped<IDealerService, DealerService>();
         services.AddScoped<IAccountService, AccountService>();
+        services.AddScoped<IVehicleModelService, VehicleModelService>();
     }
 }

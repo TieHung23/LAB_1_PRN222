@@ -1,11 +1,12 @@
 ﻿using EVDMS.BLL.Services.Abstractions;
 using EVDMS.Core.Entities;
-using EVDMS.Presentation.Models.ViewModels; // Thêm using này
+using EVDMS.Presentation.Models.ViewModels; 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering; // Thêm using này
+using Microsoft.AspNetCore.Mvc.Rendering; 
 using System.Threading.Tasks;
-
+using X.PagedList;
+using X.PagedList.Extensions;
 namespace EVDMS.Presentation.Controllers
 {
     [Authorize(Roles = "Admin,EVMStaff")]
@@ -22,10 +23,14 @@ namespace EVDMS.Presentation.Controllers
             _dealerService = dealerService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? page)
         {
+
             var accounts = await _accountService.GetAccounts();
-            return View(accounts);
+            int pageNumber = page ?? 1; 
+            int pageSize = 5; 
+            var pagedAccounts = accounts.ToPagedList(pageNumber, pageSize);
+            return View(pagedAccounts);
         }
         
         public async Task<IActionResult> Create()
@@ -45,7 +50,7 @@ namespace EVDMS.Presentation.Controllers
                 var newAccount = new Account
                 {
                     UserName = model.UserName,
-                    HashedPassword = model.Password, // Service sẽ tự động hash mật khẩu này
+                    HashedPassword = model.Password, 
                     FullName = model.FullName,
                     RoleId = model.RoleId,
                     DealerId = model.DealerId

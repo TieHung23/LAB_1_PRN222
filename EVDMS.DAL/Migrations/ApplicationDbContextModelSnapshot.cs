@@ -1394,6 +1394,10 @@ namespace EVDMS.DAL.Migrations
                     b.PrimitiveCollection<string>("FeatureIds")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
@@ -1429,6 +1433,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedAtTick = 638396640000000000L,
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Description",
+                            ImgUrl = "Hahahaha",
                             IsActive = true,
                             IsDeleted = false,
                             ModelName = "Model 1",
@@ -1444,6 +1449,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedAtTick = 638396640000000000L,
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Description",
+                            ImgUrl = "Hahahaha",
                             IsActive = true,
                             IsDeleted = false,
                             ModelName = "Model 2",
@@ -1459,6 +1465,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedAtTick = 638396640000000000L,
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Description",
+                            ImgUrl = "Hahahaha",
                             IsActive = true,
                             IsDeleted = false,
                             ModelName = "Model 3",
@@ -1474,6 +1481,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedAtTick = 638396640000000000L,
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Description",
+                            ImgUrl = "Hahahaha",
                             IsActive = true,
                             IsDeleted = false,
                             ModelName = "Model 4",
@@ -1489,6 +1497,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedAtTick = 638396640000000000L,
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             Description = "Description",
+                            ImgUrl = "Hahahaha",
                             IsActive = true,
                             IsDeleted = false,
                             ModelName = "Model 5",
@@ -1502,12 +1511,13 @@ namespace EVDMS.DAL.Migrations
                 {
                     b.HasOne("EVDMS.Core.Entities.Dealer", "Dealer")
                         .WithMany("Accounts")
-                        .HasForeignKey("DealerId");
+                        .HasForeignKey("DealerId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("EVDMS.Core.Entities.Role", "Role")
                         .WithMany("Accounts")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Dealer");

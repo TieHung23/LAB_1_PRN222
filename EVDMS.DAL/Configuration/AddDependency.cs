@@ -24,5 +24,6 @@ public static class AddDependency
         services.AddScoped<IAccountRepository, AccountRepository>();
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IDealerRepository, DealerRepository>();
+        services.AddScoped<IVehicleModelRepository, VehicleModelRepository>();
     }
 }
