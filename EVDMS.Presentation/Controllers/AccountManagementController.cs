@@ -23,16 +23,21 @@ namespace EVDMS.Presentation.Controllers
             _dealerService = dealerService;
         }
 
-        public async Task<IActionResult> Index(int? page)
+        public async Task<IActionResult> Index(string searchTerm, int? page)
         {
+           
+            ViewData["CurrentFilter"] = searchTerm;
 
-            var accounts = await _accountService.GetAccounts();
-            int pageNumber = page ?? 1; 
-            int pageSize = 5; 
+            var accounts = await _accountService.GetAccounts(searchTerm);
+
+            int pageNumber = page ?? 1;
+            int pageSize = 5;
+
             var pagedAccounts = accounts.ToPagedList(pageNumber, pageSize);
+
             return View(pagedAccounts);
         }
-        
+
         public async Task<IActionResult> Create()
         {
             // Lấy danh sách Roles và Dealers để đưa vào dropdown list trong form
@@ -57,7 +62,7 @@ namespace EVDMS.Presentation.Controllers
                 };
 
                 await _accountService.CreateAccountAsync(newAccount);
-                return RedirectToAction(nameof(Index)); // Quay về trang danh sách
+                return RedirectToAction(nameof(Index)); 
             }
 
             // Nếu dữ liệu nhập vào không hợp lệ, tải lại dropdown và hiển thị lại form
@@ -101,14 +106,14 @@ namespace EVDMS.Presentation.Controllers
 
             if (ModelState.IsValid)
             {
-                // Lấy lại tài khoản gốc từ DB
+        
                 var accountToUpdate = await _accountService.GetAccountByIdAsync(id);
                 if (accountToUpdate == null)
                 {
                     return NotFound();
                 }
 
-                // Cập nhật các thuộc tính từ ViewModel
+             
                 accountToUpdate.UserName = model.UserName;
                 accountToUpdate.FullName = model.FullName;
                 accountToUpdate.RoleId = model.RoleId;
@@ -154,5 +159,20 @@ namespace EVDMS.Presentation.Controllers
             return View(account);
         }
 
+        public async Task<IActionResult> DeletedAccounts()
+        {
+            ViewData["Title"] = "Tài khoản đã xóa";
+            var deletedAccounts = await _accountService.GetDeletedAccountsAsync();
+            return View(deletedAccounts);
+        }
+     
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Restore(Guid id)
+        {
+            await _accountService.RestoreAccountAsync(id);
+           
+            return RedirectToAction(nameof(DeletedAccounts));
+        }
     }
 }

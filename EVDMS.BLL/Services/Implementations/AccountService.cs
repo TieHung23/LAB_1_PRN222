@@ -22,24 +22,23 @@ namespace EVDMS.BLL.Services.Implementations
         public async Task<Account> Login(string username, string password)
         {
             var account = await _accountRepository.GetAccountByUsername(username);
-
             if (account == null)
             {
                 return null;
             }
-           
             bool isPasswordVerified = BCrypt.Net.BCrypt.Verify(password, account.HashedPassword);
-
             if (isPasswordVerified)
             {
-                return account; // Mật khẩu chính xác, đăng nhập thành công
+                if (account.IsDeleted == false && account.IsActive == true)
+                {
+                    return account; 
+                }
             }
-
-            return null; // Mật khẩu sai, đăng nhập thất bại
+            return null;
         }
-        public async Task<IEnumerable<Account>> GetAccounts()
+        public async Task<IEnumerable<Account>> GetAccounts(string searchTerm)
         {
-            return await _accountRepository.GetAccounts();
+            return await _accountRepository.GetAccounts(searchTerm);
         }
 
         public async Task<Account> CreateAccountAsync(Account newAccount)
@@ -71,6 +70,20 @@ namespace EVDMS.BLL.Services.Implementations
         public async Task<Account> GetAccountByIdWithDetailsAsync(Guid id)
         {
             return await _accountRepository.GetByIdWithDetailsAsync(id);
+        }
+
+        public async Task<IEnumerable<Account>> GetDeletedAccountsAsync()
+        {
+            return await _accountRepository.GetDeletedAccountsAsync();
+        }
+
+        public async Task RestoreAccountAsync(Guid id)
+        {
+            var account = await _accountRepository.GetByIdAsync(id);
+            if (account != null)
+            {
+                await _accountRepository.RestoreAsync(account);
+            }
         }
 
     }

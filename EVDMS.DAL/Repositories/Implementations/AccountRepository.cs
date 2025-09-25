@@ -24,16 +24,25 @@ namespace EVDMS.DAL.Repositories.Implementations
                                   .FirstOrDefaultAsync(a => a.UserName.Equals(username));
         }
 
-        public async Task<IEnumerable<Account>> GetAccounts()
+        public async Task<IEnumerable<Account>> GetAccounts(string searchTerm)
         {
-            return await _context.Accounts
-                                 .Where(a => !a.IsDeleted)
-                                 .Include(a => a.Role)
-                                 .Include(a => a.Dealer)
-                                 .ToListAsync();
+          
+            var query = _context.Accounts
+                                .Where(a => !a.IsDeleted)
+                                .Include(a => a.Role)
+                                .Include(a => a.Dealer)
+                                .AsQueryable();
+
+            
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(a => a.UserName.Contains(searchTerm) || a.FullName.Contains(searchTerm));
+            }
+
+            return await query.OrderBy(a => a.UserName).ToListAsync();
         }
 
-      
+
         public async Task<Account> AddAsync(Account account)
         {
             await _context.Accounts.AddAsync(account);
@@ -64,6 +73,22 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Include(a => a.Role)
                                  .Include(a => a.Dealer)
                                  .FirstOrDefaultAsync(a => a.Id == id);
+        }
+
+        public async Task<IEnumerable<Account>> GetDeletedAccountsAsync()
+        {
+            return await _context.Accounts
+                                 .Where(a => a.IsDeleted) 
+                                 .Include(a => a.Role)
+                                 .Include(a => a.Dealer)
+                                 .ToListAsync();
+        }
+
+        public async Task RestoreAsync(Account account)
+        {
+            account.IsDeleted = false; 
+            _context.Accounts.Update(account);
+            await _context.SaveChangesAsync();
         }
     }
 }

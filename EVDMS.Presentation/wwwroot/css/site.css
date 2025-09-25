@@ -139,3 +139,70 @@ footer.footer {
         text-shadow: 0 0 10px #00c0e0, 0 0 2px #fff;
     }
 }
+
+/* --- STYLING CHO TRANG LOGIN --- */
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 1; /* Quan trọng: Giúp căn giữa theo chiều dọc */
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: rgba(30, 30, 30, 0.75);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #e0e0e0;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .login-header .fas {
+        font-size: 4rem;
+        color: #00d9ff;
+        margin-bottom: 15px;
+        text-shadow: 0 0 15px rgba(0, 217, 255, 0.7);
+    }
+
+    .login-header h2 {
+        font-weight: 700;
+    }
+
+/* Tùy chỉnh input cho theme tối */
+.login-card .form-control {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+    color: #fff;
+}
+
+    .login-card .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+        color: #fff;
+    }
+
+/* Tùy chỉnh label của form-floating */
+.login-card .form-floating > label {
+    color: #aaa;
+}
+
+.login-card .btn-link {
+    color: #a0a0a0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .login-card .btn-link:hover {
+        color: #00d9ff;
+    }
