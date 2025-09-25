@@ -1,0 +1,47 @@
+﻿@model EVDMS.Core.Entities.Account
+
+@{
+    ViewData["Title"] = "Chi tiết tài khoản";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-3">
+            Tên đăng nhập
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.UserName)
+        </dd>
+        <dt class="col-sm-3">
+            Họ và tên
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.FullName)
+        </dd>
+        <dt class="col-sm-3">
+            Vai trò
+        </dt>
+        <dd class="col-sm-9">
+            @Html.DisplayFor(model => model.Role.Name)
+        </dd>
+        <dt class="col-sm-3">
+            Đại lý
+        </dt>
+        <dd class="col-sm-9">
+            @(Model.Dealer?.Name ?? "N/A")
+        </dd>
+        <dt class="col-sm-3">
+            Trạng thái
+        </dt>
+        <dd class="col-sm-9">
+            @(Model.IsActive ? "Hoạt động" : "Vô hiệu hóa")
+        </dd>
+    </dl>
+</div>
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Chỉnh sửa</a>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+</div>

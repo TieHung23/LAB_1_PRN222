@@ -14,8 +14,10 @@
   <ItemGroup>
     <Folder Include="DTOs/Request/" />
     <Folder Include="DTOs/Response/" />
-    <Folder Include="IServices/" />
-    <Folder Include="Services/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
   </ItemGroup>
 
 </Project>

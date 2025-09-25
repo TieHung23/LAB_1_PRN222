@@ -1,4 +1,4 @@
-using EVDMS.Core.CommonEntities;
+﻿using EVDMS.Core.CommonEntities;
 using EVDMS.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -23,6 +23,19 @@ public class ApplicationDbContext : DbContext
             property.SetPrecision(18);
             property.SetScale(2);
         }
+        // Cấu hình mối quan hệ: Một Role có nhiều Account
+        modelBuilder.Entity<Role>()
+            .HasMany(r => r.Accounts)
+            .WithOne(a => a.Role)
+            .HasForeignKey(a => a.RoleId)
+            .OnDelete(DeleteBehavior.Restrict); // Ngăn không cho xóa Role nếu vẫn còn Account
+
+        // Cấu hình mối quan hệ: Một Dealer có nhiều Account
+        modelBuilder.Entity<Dealer>()
+            .HasMany(d => d.Accounts)
+            .WithOne(a => a.Dealer)
+            .HasForeignKey(a => a.DealerId)
+            .OnDelete(DeleteBehavior.SetNull); // Nếu xóa Dealer, set DealerId của Account thành null
 
         modelBuilder.Entity<Order>()
             .HasOne(o => o.Customer)
@@ -161,7 +174,7 @@ public class ApplicationDbContext : DbContext
         var vehicleModels = new List<VehicleModel>();
         for (int i = 1; i <= 5; i++)
         {
-            vehicleModels.Add(new VehicleModel { Id = NewGuid(5, i), ModelName = $"Model {i}", Brand = "Tesla", VehicleType = "Sedan", Description = "Description", ReleaseYear = 2022, IsActive = true, IsDeleted = false, VehicleConfigId = vehicleConfigs[i - 1].Id, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId });
+            vehicleModels.Add(new VehicleModel { Id = NewGuid(5, i), ModelName = $"Model {i}", Brand = "Tesla", VehicleType = "Sedan", Description = "Description", ReleaseYear = 2022, IsActive = true, IsDeleted = false, VehicleConfigId = vehicleConfigs[i - 1].Id, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, ImgUrl = "Hahahaha" });
         }
         modelBuilder.Entity<VehicleModel>().HasData(vehicleModels);
 
