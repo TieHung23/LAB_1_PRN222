@@ -1,4 +1,9 @@
+﻿using EVDMS.BLL.Services.Abstractions;
+using EVDMS.BLL.Services.Implementations;
 using EVDMS.BLL.WrapConfiguration;
+using EVDMS.DAL.Repositories.Abstractions;
+using EVDMS.DAL.Repositories.Implementations;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +12,23 @@ builder.Services.AddControllersWithViews();
 
 // Add BBL DI
 builder.Services.AddDatabaseDAL(builder.Configuration);
+
+builder.Services.AddRepositoryDAL();
+builder.Services.AddServices();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Account/Login";
+        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+        options.AccessDeniedPath = "/Home/AccessDenied";
+    });
+
+var passwordToHash = "12345"; // <-- Thay bằng mật khẩu bạn muốn đặt
+var hashedPassword = BCrypt.Net.BCrypt.HashPassword(passwordToHash);
+Console.WriteLine($"\n\n--- HASHED PASSWORD ---\n{hashedPassword}\n-----------------------\n\n");
+
+builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -19,8 +41,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles();
 app.UseRouting();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapStaticAssets();

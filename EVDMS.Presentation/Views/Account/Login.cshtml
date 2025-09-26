@@ -1,0 +1,39 @@
+﻿@model EVDMS.Presentation.Models.ViewModels.LoginViewModel
+
+@{
+    ViewData["Title"] = "Đăng nhập";
+    // Sử dụng layout trống để trang đăng nhập không có header và footer
+    Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+}
+
+<div class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <i class="fas fa-user-circle"></i>
+            <h2>Đăng nhập</h2>
+        </div>
+        <section>
+            <form id="account" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+                <div class="form-floating mb-3">
+                    <input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Tên đăng nhập" />
+                    <label asp-for="UserName">Tên đăng nhập</label>
+                    <span asp-validation-for="UserName" class="text-danger"></span>
+                </div>
+                <div class="form-floating mb-3">
+                    <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Mật khẩu" />
+                    <label asp-for="Password">Mật khẩu</label>
+                    <span asp-validation-for="Password" class="text-danger"></span>
+                </div>
+                <div class="mt-4">
+                    <button id="login-submit" type="submit" class="w-100 btn btn-primary btn-lg">Đăng nhập</button>
+                    <a asp-controller="Home" asp-action="Index" class="btn btn-link w-100 mt-2">Quay về trang chủ</a>
+                </div>
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

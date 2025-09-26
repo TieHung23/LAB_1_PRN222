@@ -16,6 +16,8 @@ public class VehicleModel : CreatedCommon
 
     public string Description { get; set; } = string.Empty;
 
+    public string ImgUrl { get; set; } = string.Empty;
+
     public int ReleaseYear { get; set; }
 
     public bool IsActive { get; set; } = true;

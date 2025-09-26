@@ -23,4 +23,6 @@ public class Order : CreatedCommon
     public Inventory? Inventory { get; set; }
 
     public Promotion? Promotion { get; set; }
+
+    public Payment? Payment { get; set; }
 }

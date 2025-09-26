@@ -1,31 +1,279 @@
-html {
-  font-size: 14px;
-}
+﻿
+/* --- PHẦN CẬP NHẬT BACKGROUND --- */
+@keyframes gradientAnimation {
+    0% {
+        background-position: 0% 50%;
+    }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
+    50% {
+        background-position: 100% 50%;
+    }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
-
-html {
-  position: relative;
-  min-height: 100%;
+    100% {
+        background-position: 0% 50%;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    font-family: 'Roboto', sans-serif;
+    color: #e0e0e0;
+    background: linear-gradient(-45deg, #0b0f18, #121828, #0d1e2b, #003049);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+}
+/* --- KẾT THÚC CẬP NHẬT BACKGROUND --- */
+
+/* Header & Navbar */
+.navbar {
+    background-color: rgba(20, 25, 30, 0.85) !important;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #00c0e0;
+    box-shadow: 0 0 15px rgba(0, 192, 224, 0.15);
 }
 
-.form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
-  color: var(--bs-secondary-color);
-  text-align: end;
+.navbar-brand {
+    font-weight: bold;
+    color: #00c0e0 !important;
+    text-shadow: 0 0 8px rgba(0, 192, 224, 0.6);
+    transition: text-shadow 0.3s ease;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
 }
 
-.form-floating > .form-control-plaintext:focus::placeholder, .form-floating > .form-control:focus::placeholder {
-  text-align: start;
+    .navbar-brand:hover {
+        text-shadow: 0 0 15px #00d9ff, 0 0 3px #fff;
+    }
+
+    .navbar-brand .logo-icon {
+        font-size: 1.5rem;
+        margin-right: 8px;
+        color: #00c0e0;
+        animation: icon-glow 2s ease-in-out infinite alternate;
+    }
+
+.nav-link {
+    color: #e0e0e0 !important;
+    transition: color 0.3s ease, background-color 0.3s ease;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+    .nav-link:hover, .nav-item.active > .nav-link {
+        color: #121212 !important;
+        background-color: #00c0e0;
+    }
+
+/* Main Content Area */
+main[role="main"] {
+    background-color: rgba(30, 30, 30, 0.7);
+    border-radius: 15px;
+    padding: 30px;
+    margin-top: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+/* Footer Styles */
+
+/* --- PHẦN SỬA LỖI FOOTER --- */
+footer.footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    color: #a0a0a0;
+    border-top: 1px solid #00c0e0;
+    background-color: rgba(20, 25, 30, 0.9);
+    backdrop-filter: blur(10px);
+    padding: 20px 0;
+    text-align: center;
+}
+/* ----------------------------------- */
+
+
+
+
+/* Button Styles */
+.btn-primary {
+    background-color: #00a0c0;
+    border-color: #00a0c0;
+    color: #ffffff;
+    font-weight: bold;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+    .btn-primary:hover {
+        background-color: #00c0e0;
+        transform: translateY(-2px);
+        box-shadow: 0 0 20px rgba(0, 192, 224, 0.7);
+    }
+
+/* Table Styles */
+.table {
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+}
+
+    .table thead th {
+        color: #00c0e0;
+        border-bottom: 2px solid #00c0e0;
+    }
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-bordered, .table-bordered th, .table-bordered td {
+    border: 1px solid #444;
+}
+
+/* Animation Keyframes */
+@keyframes icon-glow {
+    from {
+        text-shadow: 0 0 5px #00c0e0;
+    }
+
+    to {
+        text-shadow: 0 0 10px #00c0e0, 0 0 2px #fff;
+    }
+}
+
+/* --- STYLING CHO TRANG LOGIN --- */
+
+.login-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-grow: 1; /* Quan trọng: Giúp căn giữa theo chiều dọc */
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 40px;
+    background: rgba(30, 30, 30, 0.75);
+    border-radius: 15px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #e0e0e0;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+    .login-header .fas {
+        font-size: 4rem;
+        color: #00d9ff;
+        margin-bottom: 15px;
+        text-shadow: 0 0 15px rgba(0, 217, 255, 0.7);
+    }
+
+    .login-header h2 {
+        font-weight: 700;
+    }
+
+/* Tùy chỉnh input cho theme tối */
+.login-card .form-control {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 1px solid #444;
+    color: #fff;
+}
+
+    .login-card .form-control:focus {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-color: #00d9ff;
+        box-shadow: 0 0 0 0.25rem rgba(0, 217, 255, 0.25);
+        color: #fff;
+    }
+
+/* Tùy chỉnh label của form-floating */
+.login-card .form-floating > label {
+    color: #aaa;
+}
+
+.login-card .btn-link {
+    color: #a0a0a0;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+    .login-card .btn-link:hover {
+        color: #00d9ff;
+    }
+/* --- STYLE CHO PRODUCT SECTION --- */
+.product-section {
+    padding: 60px 0;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 50px;
+    font-size: 2.5rem;
+    color: #00c0e0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.product-card {
+    background-color: #2c2c2c;
+    border: 1px solid #444;
+    border-radius: 15px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.5s ease, transform 0.5s ease;
+    opacity: 0;
+    transform: translateY(50px);
+    display: flex; 
+    flex-direction: column; 
+    height: 100%; 
+}
+
+    .product-card.is-visible {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    .product-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 30px rgba(0, 192, 224, 0.4);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 2px solid #00c0e0;
+    }
+
+.product-card-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+    flex-grow: 1;
+}
+
+    .product-card-body h5 {
+        color: #00c0e0;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+    }
+
+    .product-card-body .btn {
+        margin-top: auto; 
+    }
+
+#tsparticles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: -1; 
+    top: 0;
+    left: 0;
 }
