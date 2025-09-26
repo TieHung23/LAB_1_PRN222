@@ -40,5 +40,12 @@ namespace EVDMS.DAL.Repositories.Implementations
 
             return await query.OrderBy(vm => vm.ModelName).ToListAsync();
         }
+
+        public async Task<VehicleModel> GetByIdAsync(Guid id)
+        {
+            return await _context.VehicleModels
+                                 .Include(vm => vm.VehicleConfig) 
+                                 .FirstOrDefaultAsync(vm => vm.Id == id);
+        }
     }
 }

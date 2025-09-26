@@ -10,5 +10,9 @@ namespace EVDMS.BLL.Services.Abstractions
     {
         Task<IEnumerable<VehicleModel>> GetFeaturedModelsAsync(int count);
         Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm);
+
+        Task<VehicleModel> GetByIdAsync(Guid id);
     }
+
+
 }

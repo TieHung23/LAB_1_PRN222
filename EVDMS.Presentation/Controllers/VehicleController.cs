@@ -27,5 +27,15 @@ namespace EVDMS.Presentation.Controllers
 
             return View(vehicles.ToPagedList(pageNumber, pageSize));
         }
+
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var vehicle = await _vehicleModelService.GetByIdAsync(id);
+            if (vehicle == null)
+            {
+                return NotFound();
+            }
+            return View(vehicle);
+        }
     }
 }
