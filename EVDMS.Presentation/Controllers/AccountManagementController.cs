@@ -39,7 +39,6 @@ namespace EVDMS.Presentation.Controllers
 
         public async Task<IActionResult> Create()
         {
-            // Lấy danh sách Roles và Dealers để đưa vào dropdown list trong form
             ViewBag.Roles = new SelectList(await _roleService.GetAllAsync(), "Id", "Name");
             ViewBag.Dealers = new SelectList(await _dealerService.GetAllAsync(), "Id", "Name");
             return View();
@@ -49,6 +48,20 @@ namespace EVDMS.Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(CreateAccountViewModel model)
         {
+           
+            var selectedRole = await _roleService.GetByIdAsync(model.RoleId);
+
+            if (selectedRole != null && (selectedRole.Name == "Dealer Staff" || selectedRole.Name == "Dealer Manager"))
+            {
+                if (!model.DealerId.HasValue)
+                {
+                    ModelState.AddModelError("DealerId", "Vui lòng chọn một đại lý cho vai trò này.");
+                }
+            }
+            else
+            {
+                model.DealerId = null;
+            }
             if (ModelState.IsValid)
             {
                 var newAccount = new Account
@@ -63,8 +76,6 @@ namespace EVDMS.Presentation.Controllers
                 await _accountService.CreateAccountAsync(newAccount);
                 return RedirectToAction(nameof(Index)); 
             }
-
-            // Nếu dữ liệu nhập vào không hợp lệ, tải lại dropdown và hiển thị lại form
             ViewBag.Roles = new SelectList(await _roleService.GetAllAsync(), "Id", "Name", model.RoleId);
             ViewBag.Dealers = new SelectList(await _dealerService.GetAllAsync(), "Id", "Name", model.DealerId);
             return View(model);

@@ -21,5 +21,10 @@ namespace EVDMS.DAL.Repositories.Implementations
         {
             return await _context.Roles.ToListAsync();
         }
+
+        public async Task<Role> GetByIdAsync(Guid id)
+        {
+            return await _context.Roles.FindAsync(id);
+        }
     }
 }
