@@ -25,5 +25,20 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Take(count)
                                  .ToListAsync();
         }
+
+
+        public async Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm)
+        {
+            var query = _context.VehicleModels
+                                .Where(vm => !vm.IsDeleted && vm.IsActive)
+                                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                query = query.Where(vm => vm.ModelName.Contains(searchTerm) || vm.Brand.Contains(searchTerm));
+            }
+
+            return await query.OrderBy(vm => vm.ModelName).ToListAsync();
+        }
     }
 }

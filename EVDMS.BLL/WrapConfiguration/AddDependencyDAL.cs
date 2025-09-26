@@ -27,5 +27,10 @@ public static class AddDependencyDAL
         services.AddScoped<IDealerService, DealerService>();
         services.AddScoped<IAccountService, AccountService>();
         services.AddScoped<IVehicleModelService, VehicleModelService>();
+        services.AddScoped<IOrderService, OrderService>();
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<ITestDriveService, TestDriveService>();
+        services.AddScoped<IInventoryService, InventoryService>();
+        services.AddScoped<IPromotionService, PromotionService>();
     }
 }

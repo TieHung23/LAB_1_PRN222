@@ -21,5 +21,10 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _vehicleModelRepository.GetFeaturedModelsAsync(count);
         }
+
+        public async Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm)
+        {
+            return await _vehicleModelRepository.GetAllAsync(searchTerm);
+        }
     }
 }

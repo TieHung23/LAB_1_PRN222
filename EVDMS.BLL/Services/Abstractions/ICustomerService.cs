@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using EVDMS.Core.Entities;
 namespace EVDMS.BLL.Services.Abstractions
 {
-    public interface IVehicleModelService
+    public interface ICustomerService
     {
-        Task<IEnumerable<VehicleModel>> GetFeaturedModelsAsync(int count);
-        Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm);
+        Task<IEnumerable<Customer>> GetAllAsync();
     }
 }

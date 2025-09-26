@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 using EVDMS.Core.Entities;
 namespace EVDMS.BLL.Services.Abstractions
 {
-    public interface IVehicleModelService
+    public interface IInventoryService
     {
-        Task<IEnumerable<VehicleModel>> GetFeaturedModelsAsync(int count);
-        Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm);
+        Task<IEnumerable<Inventory>> GetAvailableStockAsync(Guid dealerId);
     }
 }

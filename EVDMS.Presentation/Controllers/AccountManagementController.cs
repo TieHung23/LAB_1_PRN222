@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering; 
 using System.Threading.Tasks;
-using X.PagedList;
 using X.PagedList.Extensions;
 namespace EVDMS.Presentation.Controllers
 {
-    [Authorize(Roles = "Admin,EVMStaff")]
+    [Authorize(Roles = "Admin,EVM Staff")]
     public class AccountManagementController : Controller
     {
         private readonly IAccountService _accountService;
