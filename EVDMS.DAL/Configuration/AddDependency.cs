@@ -25,5 +25,10 @@ public static class AddDependency
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IDealerRepository, DealerRepository>();
         services.AddScoped<IVehicleModelRepository, VehicleModelRepository>();
+        services.AddScoped<IOrderRepository, OrderRepository>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<ITestDriveRepository, TestDriveRepository>();
+        services.AddScoped<IInventoryRepository, InventoryRepository>();
+        services.AddScoped<IPromotionRepository, PromotionRepository>();
     }
 }

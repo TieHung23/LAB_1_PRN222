@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="~/EVDMS.Presentation.styles.css" asp-append-version="true" />
 </head>
 <body>
-    @* --- ĐÃ XÓA CÁC CLASS FLEXBOX --- *@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container-fluid">
@@ -66,17 +65,81 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        @* --- ĐÃ XÓA CLASS flex-grow-1 --- *@
-        <main role="main" class="pb-3">
+    <div class="container flex-grow-1">
+        <main role="main" class="pb-3 mb-5">
             @RenderBody()
         </main>
     </div>
+    
     <footer class="border-top footer">
         <div class="container">
             &copy; 2024 - Cortexa - All Rights Reserved
         </div>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/tsparticles@2.12.0/tsparticles.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            tsParticles.load("tsparticles", {
+                background: {
+                    color: "transparent" 
+                },
+                particles: {
+                    number: {
+                        value: 80, 
+                        density: {
+                            enable: true,
+                            value_area: 800
+                        }
+                    },
+                    color: {
+                        value: "#00d9ff" 
+                    },
+                    shape: {
+                        type: "circle"
+                    },
+                    opacity: {
+                        value: 0.5,
+                        random: true
+                    },
+                    size: {
+                        value: 3,
+                        random: true
+                    },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#00d9ff", 
+                        opacity: 0.4,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2, 
+                        direction: "none",
+                        random: false,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: {
+                            enable: true,
+                            mode: "repulse"
+                        },
+                        onclick: {
+                            enable: true,
+                            mode: "push" 
+                        },
+                        resize: true
+                    }
+                },
+                retina_detect: true
+            });
+        });
+    </script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

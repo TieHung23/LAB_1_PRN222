@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EVDMS.Core.Entities;
+
 namespace EVDMS.DAL.Repositories.Abstractions
 {
-    public interface IVehicleModelRepository
+    public interface IInventoryRepository
     {
-        Task<IEnumerable<VehicleModel>> GetFeaturedModelsAsync(int count);
-        Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm);
+        Task<IEnumerable<Inventory>> GetAvailableStockAsync(Guid dealerId);
+        Task<Inventory> GetByIdAsync(Guid id);
     }
 }

@@ -1,0 +1,38 @@
+﻿@model EVDMS.Presentation.Models.ViewModels.CreateTestDriveViewModel
+
+@{
+    ViewData["Title"] = "Đặt lịch lái thử";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group mb-3">
+                <label asp-for="CustomerId" class="control-label"></label>
+                <select asp-for="CustomerId" class="form-control" asp-items="ViewBag.Customers">
+                    <option value="">-- Chọn khách hàng --</option>
+                </select>
+                <span asp-validation-for="CustomerId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="VehicleModelId" class="control-label"></label>
+                <select asp-for="VehicleModelId" class="form-control" asp-items="ViewBag.VehicleModels">
+                    <option value="">-- Chọn mẫu xe --</option>
+                </select>
+                <span asp-validation-for="VehicleModelId" class="text-danger"></span>
+            </div>
+            <div class="form-group mb-3">
+                <label asp-for="ScheduledDateTime" class="control-label"></label>
+                <input asp-for="ScheduledDateTime" class="form-control" type="datetime-local" />
+                <span asp-validation-for="ScheduledDateTime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo lịch hẹn" class="btn btn-primary" />
+                <a asp-action="Index" asp-controller="SalesDashboard" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,8 +1,147 @@
 ﻿@{
-    ViewData["Title"] = "Trang bán hàng";
+    ViewData["Title"] = "Bảng Điều Khiển Bán Hàng";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Chào mừng đến với Khu vực Bán hàng</h1>
-    <p>Đây là trang dành cho Manager và Staff.</p>
+<div class="container mt-4">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p class="lead">Chào mừng trở lại, @User.Identity.Name!</p>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Doanh thu cá nhân
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                @Convert.ToDecimal(ViewData["TotalRevenue"]).ToString("C0")
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Nghiệp vụ
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <a asp-controller="Vehicle" asp-action="Index" class="stretched-link text-decoration-none text-gray-800">Truy Vấn Xe</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-car fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            Quản lý
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            <a asp-controller="TestDrive" asp-action="Index" class="stretched-link text-decoration-none text-gray-800">Quản Lý Lịch Hẹn</a>
+                        </div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        @* <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Bán hàng</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <a asp-controller="Order" asp-action="Create" class="stretched-link text-decoration-none text-gray-800">Tạo đơn hàng</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-file-invoice-dollar fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> *@
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-secondary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">
+                                Quản lý
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                <a asp-controller="Order" asp-action="Index" class="stretched-link text-decoration-none text-gray-800">Quản Lý Đơn Hàng</a>
+                            </div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-list-alt fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 </div>
+
+@section Scripts {
+    <style>
+        .card {
+            background-color: #2c2c2c;
+            border: 1px solid #444;
+        }
+
+            .border-left-secondary {
+                border-left: .25rem solid #858796 !important;
+            }
+
+            .text-secondary {
+                color: #858796 !important;
+            }
+
+            .border-left-danger {
+                border-left: .25rem solid #e74a3b !important;
+            }
+
+            .text-danger {
+                color: #e74a3b !important;
+            }
+
+        .border-left-warning {
+            border-left: .25rem solid #f6c23e !important;
+        }
+
+        .text-warning {
+            color: #f6c23e !important;
+        }
+        .border-left-primary { border-left: .25rem solid #00d9ff !important; }
+        .border-left-success { border-left: .25rem solid #1cc88a !important; }
+        .border-left-info { border-left: .25rem solid #36b9cc !important; }
+        .text-primary { color: #00d9ff !important; }
+        .text-gray-300 { color: #5a5c69 !important; }
+        .text-gray-800 { color: #f8f9fa !important; }
+        .text-xs { font-size: .7rem; }
+    </style>
+}

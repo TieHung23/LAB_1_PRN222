@@ -1,0 +1,50 @@
+﻿@model X.PagedList.IPagedList<EVDMS.Core.Entities.VehicleModel>
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Extensions;
+
+@{
+    ViewData["Title"] = "Danh sách xe";
+}
+
+<div class="container mt-4">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <p class="lead">Tìm kiếm và truy vấn thông tin các dòng xe có sẵn.</p>
+    <div class="mb-3">
+        <a asp-controller="SalesDashboard" asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Quay lại 
+        </a>
+    </div>
+    <form asp-action="Index" method="get" class="mb-4">
+        <div class="input-group">
+            <input type="text" name="searchTerm" class="form-control" placeholder="Tìm theo tên xe hoặc thương hiệu..." value="@ViewData["CurrentFilter"]">
+            <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
+        </div>
+    </form>
+
+    <div class="row">
+        @foreach (var car in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="product-card is-visible">
+                    <img src="@(car.ImgUrl ?? "https://via.placeholder.com/400x250.png?text=Cortexa+EV")" alt="@car.ModelName">
+                    <div class="product-card-body">
+                        <h5>@car.ModelName</h5>
+                        <p>@car.Brand - @car.ReleaseYear</p>
+                        <a asp-action="Details" asp-route-id="@car.Id" class="btn btn-outline-primary">Xem chi tiết</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <br />
+
+    <div class="d-flex justify-content-center">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchTerm = ViewData["CurrentFilter"] }), new PagedListRenderOptions
+        {
+            LiElementClasses = new string[] { "page-item" },
+                PageClasses = new string[] { "page-link" },
+                ContainerDivClasses = new string[] { "pagination" }
+                })
+    </div>
+</div>

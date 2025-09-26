@@ -61,17 +61,15 @@ namespace EVDMS.Presentation.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                // Kiểm tra vai trò của tài khoản và chuyển hướng tương ứng
+
                 switch (account.Role.Name)
                 {
                     case "Admin":
-                    case "EVMStaff":
-                        // Nếu là Admin hoặc EVMStaff, chuyển đến trang quản trị
+                    case "EVM Staff": 
                         return RedirectToAction("Index", "AdminDashboard");
 
-                    case "Manager":
-                    case "Staff":
-                        // Nếu là Manager hoặc Staff, chuyển đến trang bán hàng
+                    case "Dealer Manager": 
+                    case "Dealer Staff":   
                         return RedirectToAction("Index", "SalesDashboard");
 
                     default:
@@ -85,7 +83,7 @@ namespace EVDMS.Presentation.Controllers
         }
 
         // Action để đăng xuất
-        [HttpPost] // Nên dùng [HttpPost] cho Logout để tăng tính bảo mật
+        [HttpPost] 
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {

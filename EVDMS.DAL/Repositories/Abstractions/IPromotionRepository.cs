@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EVDMS.Core.Entities;
+
 namespace EVDMS.DAL.Repositories.Abstractions
 {
-    public interface IVehicleModelRepository
+    public interface IPromotionRepository
     {
-        Task<IEnumerable<VehicleModel>> GetFeaturedModelsAsync(int count);
-        Task<IEnumerable<VehicleModel>> GetAllAsync(string searchTerm);
+        Task<IEnumerable<Promotion>> GetActivePromotionsAsync();
+        Task<Promotion> GetByIdAsync(Guid id);
     }
 }
