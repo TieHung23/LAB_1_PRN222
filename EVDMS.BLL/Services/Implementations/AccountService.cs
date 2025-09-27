@@ -31,7 +31,7 @@ namespace EVDMS.BLL.Services.Implementations
             {
                 if (account.IsDeleted == false && account.IsActive == true)
                 {
-                    return account; 
+                    return account;
                 }
             }
             return null;
@@ -43,7 +43,7 @@ namespace EVDMS.BLL.Services.Implementations
 
         public async Task<Account> CreateAccountAsync(Account newAccount)
         {
-          
+
             newAccount.HashedPassword = BCrypt.Net.BCrypt.HashPassword(newAccount.HashedPassword);
             return await _accountRepository.AddAsync(newAccount);
         }
@@ -55,7 +55,7 @@ namespace EVDMS.BLL.Services.Implementations
 
         public async Task UpdateAccountAsync(Account account)
         {
-            
+
             await _accountRepository.UpdateAsync(account);
         }
 
@@ -86,5 +86,9 @@ namespace EVDMS.BLL.Services.Implementations
             }
         }
 
+        public async Task<bool> IsUserNameExist(string userName)
+        {
+            return await _accountRepository.IsUserExist(userName);
+        }
     }
 }

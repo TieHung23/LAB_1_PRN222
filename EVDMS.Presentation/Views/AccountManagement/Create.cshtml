@@ -47,6 +47,7 @@
             <div class="form-group">
                 <input type="submit" value="Tạo mới" class="btn btn-primary" />
                 <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+                <a asp-action="Import" class="btn btn-success">Nhập từ Excel</a>
             </div>
         </form>
     </div>
@@ -69,7 +70,7 @@
                     dealerDropdown.prop('disabled', false);
                     dealerFormGroup.show();
                 } else {
-                    dealerDropdown.val(''); 
+                    dealerDropdown.val('');
                     dealerDropdown.prop('disabled', true);
                     dealerFormGroup.hide();
                 }
