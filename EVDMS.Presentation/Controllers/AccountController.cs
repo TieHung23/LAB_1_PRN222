@@ -17,19 +17,15 @@ namespace EVDMS.Presentation.Controllers
             _accountService = accountService;
         }
 
-        // Action để hiển thị trang đăng nhập
         [HttpGet]
         public IActionResult Login()
         {
-            // Nếu người dùng đã đăng nhập, chuyển hướng họ về trang chủ
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
             }
             return View();
         }
-
-        // Trong file: EVDMS.Presentation/Controllers/AccountController.cs
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -73,7 +69,6 @@ namespace EVDMS.Presentation.Controllers
                         return RedirectToAction("Index", "SalesDashboard");
 
                     default:
-                        // Mặc định, chuyển về trang chủ
                         return RedirectToAction("Index", "Home");
                 }
             }

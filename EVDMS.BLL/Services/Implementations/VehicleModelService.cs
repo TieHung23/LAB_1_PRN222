@@ -26,5 +26,10 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _vehicleModelRepository.GetAllAsync(searchTerm);
         }
+
+        public async Task<VehicleModel> GetByIdAsync(Guid id)
+        {
+            return await _vehicleModelRepository.GetByIdAsync(id);
+        }
     }
 }
