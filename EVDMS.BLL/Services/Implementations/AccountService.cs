@@ -85,6 +85,9 @@ namespace EVDMS.BLL.Services.Implementations
                 await _accountRepository.RestoreAsync(account);
             }
         }
-
+        public async Task<IEnumerable<Account>> GetAccountsByDealerAsync(Guid dealerId)
+        {
+            return await _accountRepository.GetAccountsByDealerAsync(dealerId);
+        }
     }
 }

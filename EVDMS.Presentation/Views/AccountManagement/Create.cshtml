@@ -56,4 +56,30 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+    <script>
+        $(document).ready(function () {
+            const roleDropdown = $('#RoleId');
+            const dealerDropdown = $('#DealerId');
+            const dealerFormGroup = dealerDropdown.closest('.form-group');
+
+            function toggleDealerRequirement() {
+                const selectedRoleText = roleDropdown.find('option:selected').text();
+
+                if (selectedRoleText === "Dealer Staff" || selectedRoleText === "Dealer Manager") {
+                    dealerDropdown.prop('disabled', false);
+                    dealerFormGroup.show();
+                } else {
+                    dealerDropdown.val(''); 
+                    dealerDropdown.prop('disabled', true);
+                    dealerFormGroup.hide();
+                }
+            }
+
+            toggleDealerRequirement();
+
+            roleDropdown.on('change', function () {
+                toggleDealerRequirement();
+            });
+        });
+    </script>
 }

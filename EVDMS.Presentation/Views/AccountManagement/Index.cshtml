@@ -20,6 +20,12 @@
             </a>
         </div>
     </div>
+    <div class="mb-3">
+        <a asp-controller="AdminDashboard" asp-action="Index" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Quay lại 
+        </a>
+    </div>
+
     <form asp-action="Index" method="get" class="mb-3">
         <div class="input-group">
             <input type="text" name="searchTerm" class="form-control" placeholder="Tìm theo tên đăng nhập hoặc họ tên..." value="@ViewData["CurrentFilter"]">

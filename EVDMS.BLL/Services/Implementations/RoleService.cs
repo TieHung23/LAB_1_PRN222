@@ -20,5 +20,10 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _roleRepository.GetAllAsync();
         }
+
+        public async Task<Role> GetByIdAsync(Guid id)
+        {
+            return await _roleRepository.GetByIdAsync(id);
+        }
     }
 }

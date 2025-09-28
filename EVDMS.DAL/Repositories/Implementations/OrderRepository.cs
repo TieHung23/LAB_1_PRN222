@@ -65,5 +65,38 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Include(o => o.Payment)
                                  .FirstOrDefaultAsync();
         }
+
+        public async Task<decimal> GetTotalRevenueByDealerIdAsync(Guid dealerId)
+        {
+            return await _context.Payments
+                .Where(p => p.Order.Account.DealerId == dealerId && p.IsSuccess)
+                .SumAsync(p => p.FinalPrice);
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByDealerIdAsync(Guid dealerId)
+        {
+            return await _context.Orders
+                                 .Where(o => o.Account.DealerId == dealerId)
+                                 .Include(o => o.Customer)
+                                 .Include(o => o.Inventory)
+                                    .ThenInclude(i => i.VehicleModel)
+                                 .Include(o => o.Promotion)
+                                 .Include(o => o.Payment)
+                                 .ToListAsync();
+        }
+        public async Task<List<(Account Staff, decimal Revenue)>> GetStaffRevenuesByDealerAsync(Guid dealerId)
+        {
+            var query = from a in _context.Accounts
+                        join o in _context.Orders on a.Id equals o.AccountId
+                        join p in _context.Payments on o.Id equals p.OrderId
+                        where a.DealerId == dealerId
+                              && a.Role.Name == "Dealer Staff"
+                              && p.IsSuccess
+                        group p by a into g
+                        select new { Staff = g.Key, Revenue = g.Sum(x => x.FinalPrice) };
+
+            var result = await query.ToListAsync();
+            return result.Select(r => (r.Staff, r.Revenue)).ToList();
+        }
     }
 }
