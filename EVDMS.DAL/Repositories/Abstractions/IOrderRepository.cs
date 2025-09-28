@@ -13,5 +13,6 @@ namespace EVDMS.DAL.Repositories.Abstractions
         Task<Order> AddAsync(Order order);
         Task<IEnumerable<Order>> GetOrdersByStaffIdAsync(Guid staffId);
         Task<Order> GetByIdAsync(Guid id);
+        Task<List<Order>> GetAllOrder();
     }
 }

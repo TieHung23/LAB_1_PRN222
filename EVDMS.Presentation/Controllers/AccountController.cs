@@ -61,11 +61,11 @@ namespace EVDMS.Presentation.Controllers
                 switch (account.Role.Name)
                 {
                     case "Admin":
-                    case "EVM Staff": 
+                    case "EVM Staff":
                         return RedirectToAction("Index", "AdminDashboard");
 
-                    case "Dealer Manager": 
-                    case "Dealer Staff":   
+                    case "Dealer Manager":
+                    case "Dealer Staff":
                         return RedirectToAction("Index", "SalesDashboard");
 
                     default:
@@ -78,7 +78,7 @@ namespace EVDMS.Presentation.Controllers
         }
 
         // Action để đăng xuất
-        [HttpPost] 
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Logout()
         {
