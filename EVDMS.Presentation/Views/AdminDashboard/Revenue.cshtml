@@ -1,0 +1,91 @@
+﻿@using EVDMS.Presentation.Models.ViewModels
+@model RevenueReportViewModel
+
+@{
+    ViewData["Title"] = "Báo cáo Doanh thu";
+}
+
+<div class="container mt-4">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <hr />
+
+    <div class="mb-3">
+        <a asp-controller="AdminDashboard" asp-action="Revenue" asp-route-viewByEmployee="false"
+            class="btn @(Model?.ViewByEmployee == true ? "btn-outline-primary" : "btn-primary")">
+            Xem theo Chi nhánh
+        </a>
+        <a asp-controller="AdminDashboard" asp-action="Revenue" asp-route-viewByEmployee="true"
+            class="btn @(Model?.ViewByEmployee == true ? "btn-primary" : "btn-outline-primary")">
+            Xem theo Nhân viên
+        </a>
+    </div>
+
+    <form asp-controller="AdminDashboard" asp-action="Revenue" method="get" class="d-flex">
+        <input type="text" name="msg" class="form-control me-2" placeholder="Nhập tin nhắn / từ khóa" />
+        <input type="hidden" name="viewByEmployee" value="@(Model?.ViewByEmployee ?? false)" />
+        <button type="submit" class="btn btn-success">Gửi</button>
+    </form>
+
+
+    @if (Model != null)
+    {
+        if (!Model.ViewByEmployee)
+        {
+            <!-- Xem theo Chi nhánh -->
+            @foreach (var branch in Model.Branches ?? Enumerable.Empty<BranchRevenueViewModel>())
+            {
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h4>@branch.DealerName - Tổng doanh thu: @branch.TotalRevenue.ToString("N0") VND</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Nhân viên</th>
+                                    <th>Doanh thu</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var emp in branch.Employees ?? Enumerable.Empty<EmployeeRevenueViewModel>())
+                                {
+                                    <tr>
+                                        <td>@emp.EmployeeName</td>
+                                        <td>@emp.Revenue.ToString("N0") VND</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <!-- Xem theo Nhân viên -->
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>Nhân viên</th>
+                        <th>Doanh thu</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var emp in Model.Employees ?? Enumerable.Empty<EmployeeRevenueViewModel>())
+                    {
+                        <tr>
+                            <td>@emp.EmployeeName</td>
+                            <td>@emp.Revenue.ToString("N0") VND</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+    else
+    {
+        <div class="alert alert-warning text-center">
+            <strong>Không có dữ liệu để hiển thị.</strong>
+        </div>
+    }
+</div>

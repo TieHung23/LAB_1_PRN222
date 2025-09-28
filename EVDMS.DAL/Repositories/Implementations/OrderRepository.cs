@@ -47,7 +47,7 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Include(o => o.Inventory)
                                     .ThenInclude(i => i.VehicleModel)
                                  .Include(o => o.Promotion)
-                                 .Include(o => o.Payment) 
+                                 .Include(o => o.Payment)
                                  .OrderByDescending(o => o.CreatedAt)
                                  .ToListAsync();
         }
@@ -57,13 +57,20 @@ namespace EVDMS.DAL.Repositories.Implementations
             return await _context.Orders
                                  .Where(o => o.Id == id)
                                  .Include(o => o.Customer)
-                                 .Include(o => o.Account) 
+                                 .Include(o => o.Account)
                                  .Include(o => o.Inventory)
                                     .ThenInclude(i => i.VehicleModel)
-                                        .ThenInclude(vm => vm.VehicleConfig) 
+                                        .ThenInclude(vm => vm.VehicleConfig)
                                  .Include(o => o.Promotion)
                                  .Include(o => o.Payment)
                                  .FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Order>> GetAllOrder()
+        {
+            return await _context.Orders
+                .Include(o => o.Account).ThenInclude(o => o!.Dealer)
+                .Include(o => o.Payment).ToListAsync();
         }
     }
 }

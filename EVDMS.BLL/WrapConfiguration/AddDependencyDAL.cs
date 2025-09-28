@@ -32,5 +32,6 @@ public static class AddDependencyDAL
         services.AddScoped<ITestDriveService, TestDriveService>();
         services.AddScoped<IInventoryService, InventoryService>();
         services.AddScoped<IPromotionService, PromotionService>();
+        services.AddScoped<IAIService, AIService>();
     }
 }

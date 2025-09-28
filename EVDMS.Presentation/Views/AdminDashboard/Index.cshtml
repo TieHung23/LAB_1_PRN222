@@ -14,11 +14,22 @@
                 <div class="card-body">
                     <h5 class="card-title">Quản lý Tài khoản</h5>
                     <p class="card-text">Thêm, sửa, xóa, và import tài khoản cho nhân viên và quản lý.</p>
-                    <a asp-controller="AccountManagement" asp-action="Index" class="btn btn-primary">Đi đến trang quản lý</a>
+                    <a asp-controller="AccountManagement" asp-action="Index" class="btn btn-primary">Đi đến trang quản
+                        lý</a>
                 </div>
             </div>
         </div>
 
-       
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title">Xem Doanh Thu</h5>
+                    <p class="card-text">Theo dõi doanh thu theo ngày, tháng, năm hoặc tùy chọn lọc.</p>
+                    <a asp-controller="AdminDashboard" asp-action="Revenue" class="btn btn-success">
+                        Xem doanh thu
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
