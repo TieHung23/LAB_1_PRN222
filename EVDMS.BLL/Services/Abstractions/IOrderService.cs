@@ -14,7 +14,9 @@ namespace EVDMS.BLL.Services.Abstractions
         Task<Order> CreateOrderAsync(Order order);
         Task<IEnumerable<Order>> GetOrdersByStaffIdAsync(Guid staffId);
         Task<Order> GetByIdAsync(Guid id);
-
+        Task<decimal> GetTotalRevenueByDealerIdAsync(Guid dealerId);
+        Task<IEnumerable<Order>> GetOrdersByDealerIdAsync(Guid dealerId);
+        Task<List<(Account Staff, decimal Revenue)>> GetStaffRevenuesByDealerAsync(Guid dealerId);
         Task<List<Order>> GetAllOrder();
     }
 }
