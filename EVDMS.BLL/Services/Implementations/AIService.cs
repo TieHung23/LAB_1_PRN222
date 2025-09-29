@@ -3,11 +3,11 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using EVDMS.BLL.DTOs.Response;
 using EVDMS.BLL.Services.Abstractions;
 using EVDMS.Core.Entities;
 using EVDMS.DAL.Database;
 using EVDMS.DAL.Repositories.Abstractions;
+using EVDMS.DAL.Response;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -18,7 +18,6 @@ public class AIService : IAIService
     private readonly HttpClient _client;
     private readonly string ERROR_MSG;
     private readonly string END_SYSTEM_PROMPT;
-    private readonly string PRE_SYSTEM_PROMPT;
     private readonly ILogger<AIService> _logger;
     private readonly IRawSQL _rawSQL;
     private readonly ApplicationDbContext _context;
@@ -32,56 +31,101 @@ public class AIService : IAIService
         _logger = logger;
         _rawSQL = rawSQL;
         _context = context;
-        PRE_SYSTEM_PROMPT = "You are an SQL generator. " +
-                "Use only SQL Server syntax.Do not use backticks (`). " +
-                "Use square brackets ([]) only if needed. " +
-                "Do not use MySQL or PostgreSQL specific functions. " +
-                "Only respond with the SQL script inside triple backticks, no explanation.\n" +
-                "- If you need to reference DealerId, you must go through the Accounts table (i.e., do not join directly from Orders/  Payments to Dealers without passing through Accounts).\n" +
-                "- If aggregation is needed, use SUM, COUNT, AVG, MAX, or MIN properly.\n" +
-                "- Only generate SELECT statements; do not use CREATE, UPDATE, DELETE, or other SQL types.\n" +
-                "- Use T-SQL syntax compatible with Microsoft SQL Server.\n" +
-                "- Use TOP N instead of LIMIT.\n" +
-                "- Do not use NULLS FIRST or NULLS LAST; handle NULLs using ISNULL, COALESCE, or CASE expressions if needed.\n" +
-                "- When ordering by an aggregate, reference the aggregate function directly in ORDER BY.\n" +
-                "- Always ensure that the output query will run in Microsoft SQL Server without syntax errors.";
+    }
+
+    public async Task<List<RevenueDataDTOs>> ExecuteSql(string sql)
+    {
+        var result = await _rawSQL.ExecRawSQLAsync(sql);
+
+        return result;
     }
 
     public async Task<string> GenerateSql(string userPrompt, string expectedResult)
     {
-        var entities = new[]
-        {
-            new { Name = nameof(_context.Accounts), Columns = typeof(Account).GetProperties().Select(p => p.Name).ToList() },
-            new { Name = nameof(_context.Orders), Columns = typeof(Order).GetProperties().Select(p => p.Name).ToList() },
-            new { Name = nameof(_context.Dealers), Columns = typeof(Dealer).GetProperties().Select(p => p.Name).ToList() },
-            new { Name = nameof(_context.Payments), Columns = typeof(Payment).GetProperties().Select(p => p.Name).ToList() }
-        };
+        var ordersTable = nameof(_context.Orders);
+        var ordersPk = nameof(Order.Id);
+        var ordersAccountFk = nameof(Order.AccountId);
 
-        // var systemPrompt =
-        //     "You are an AI specialized in generating SQL queries specifically for Microsoft SQL Server (T-SQL).\n" +
-        //     "Rules:\n" +
-        //     "- Always output only valid T-SQL SELECT statements (no explanations, no comments, no other SQL types).\n" +
-        //     "- You can only use the following tables and their columns:\n\n" +
-        //     string.Join("\n", entities.Select(e =>
-        //         $"- Table [{e.Name}] with columns: {string.Join(", ", e.Columns)}")) +
-        //     "\n\n" +
-        //     "- Always use proper JOINs based on logical relations.\n" +
-        //     "- Use table aliases (short, like a, o, d, p).\n" +
-        //     "- If you need to reference DealerId, you must go through the Accounts table (i.e., do not join directly from Orders/Payments to Dealers without passing through Accounts).\n" +
-        //     "- If aggregation is needed, use SUM, COUNT, AVG, MAX, or MIN properly.\n" +
-        //     "- Only generate SELECT statements; do not use CREATE, UPDATE, DELETE, or other SQL types.\n" +
-        //     "- Use T-SQL syntax compatible with Microsoft SQL Server.\n" +
-        //     "- Use TOP N instead of LIMIT.\n" +
-        //     "- Do not use NULLS FIRST or NULLS LAST; handle NULLs using ISNULL, COALESCE, or CASE expressions if needed.\n" +
-        //     "- When ordering by an aggregate, reference the aggregate function directly in ORDER BY.\n" +
-        //     "- Always ensure that the output query will run in Microsoft SQL Server without syntax errors.";
+        var paymentsTable = nameof(_context.Payments);
+        var paymentsPk = nameof(Payment.Id);
+        var paymentsOrderFk = nameof(Payment.OrderId);
+        var paymentsAmountCol = nameof(Payment.FinalPrice);
 
-        var systemPrompt = "- You can only use the following tables and their columns:\n\n" +
-            string.Join("\n", entities.Select(e =>
-                $"- Table [{e.Name}] with columns: {string.Join(", ", e.Columns)}")) +
-            "\n\n";
+        var accountsTable = nameof(_context.Accounts);
+        var accountsPk = nameof(Account.Id);
+        var accountsDealerFk = nameof(Account.DealerId);
+        var accountsName = nameof(Account.FullName);
 
-        var finalSystemPrompt = PRE_SYSTEM_PROMPT + systemPrompt + END_SYSTEM_PROMPT + expectedResult;
+        var dealersTable = nameof(_context.Dealers);
+        var dealersPk = nameof(Dealer.Id);
+        var dealersNameCol = nameof(Dealer.Name);
+
+        var systemPrompt = $@"
+            You are an AI specialized in generating SQL queries for Microsoft SQL Server.
+
+            Database Schema:
+            - Table: {ordersTable}
+            - {ordersPk} (PK)
+            - {ordersAccountFk} (FK → {accountsTable}.{accountsPk})
+            - other columns…
+
+            - Table: {paymentsTable}
+            - {paymentsPk} (PK)
+            - {paymentsOrderFk} (FK → {ordersTable}.{ordersPk})
+            - {paymentsAmountCol}
+            - other columns…
+
+            - Table: {accountsTable}
+            - {accountsPk} (PK)
+            - {accountsDealerFk} (FK → {dealersTable}.{dealersPk})
+            - {accountsName}
+            - other columns…
+
+            - Table: {dealersTable}
+            - {dealersPk} (PK)
+            - {dealersNameCol}
+            - other columns…
+
+            Relationships:
+            1. {ordersTable} → {accountsTable} ({ordersTable}.{ordersAccountFk} = {accountsTable}.{accountsPk})
+            2. {ordersTable} → {paymentsTable} ({paymentsTable}.{paymentsOrderFk} = {ordersTable}.{ordersPk})
+            3. {accountsTable} → {dealersTable} ({accountsTable}.{accountsDealerFk} = {dealersTable}.{dealersPk})
+
+            Guidelines:
+            - Always use proper JOINs based on the relationships above.
+            - Use table aliases (o = {ordersTable}, p = {paymentsTable}, a = {accountsTable}, d = {dealersTable}).
+            - Always generate SQL in Microsoft SQL Server syntax (T-SQL).
+            - Do not add `NULLS LAST` or PostgreSQL-specific syntax.
+            - The output must shape correctly into the requested ViewModel (using aliases that match the property names).
+            - For aggregation queries, group by all non-aggregated columns.
+
+            Strict Rules:
+            - Use ONLY ONE SQL script for the answer (no multiple scripts).
+            - Use ONLY the provided tables ({ordersTable}, {paymentsTable}, {accountsTable}, {dealersTable}) 
+            — do not reference any other tables or objects.
+            - Do not generate explanations, comments, or extra text. Return ONLY the SQL query.
+
+            Special Rules for interpretation of user requests:
+            - If the user asks for ""top dealer(s)"":
+                1. First, find the dealer(s) with the highest total revenue (using SUM of {paymentsTable}.{paymentsAmountCol}).
+                2. If the user also wants employee-level details, then:
+                    - Return ALL accounts (employees) belonging to that dealer(s).
+                    - Show their individual revenue inside that dealer(s).
+                3. To implement this:
+                    - Use a CTE or subquery to calculate dealer revenue.
+                    - Pick TOP N dealer(s) based on revenue.
+                    - Join back to Accounts and Orders to get per-employee totals.
+
+            - If the user asks for ""top employees"":
+                - Return employees with the highest revenue directly, regardless of dealer.
+
+            - If the user asks for ""top N dealers"":
+                - Return N dealers with the highest revenue, using the same CTE/subquery approach.
+
+            - Always ensure that when both dealer(s) and employees are requested:
+                - Dealer(s) are ranked first, then employee details are returned for those dealers.
+        ";
+        var finalSystemPrompt = systemPrompt + END_SYSTEM_PROMPT + expectedResult;
 
         var requestBody = new
         {
@@ -127,15 +171,5 @@ public class AIService : IAIService
         _logger.LogInformation($"Result SQL : {sql}");
 
         return sql;
-    }
-
-    public async Task<List<BranchRevenueDTO>> GetBranchRevenue(string sql)
-    {
-        return await _rawSQL.GetBranchRevenueRawSQL(sql);
-    }
-
-    public async Task<List<EmployeeRevenueDTO>> GetEmployeeRevenue(string sql)
-    {
-        return await _rawSQL.GetEmployeeRevenueRawSQL(sql);
     }
 }
