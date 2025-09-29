@@ -18,13 +18,10 @@
             class="btn @(Model?.ViewByEmployee == true ? "btn-primary" : "btn-outline-primary")">
             Xem theo Nhân viên
         </a>
+        <a asp-controller="AdminDashboard" asp-action="RevenueAI" class="btn btn-success">
+            Xem bằng AI
+        </a>
     </div>
-
-    <form asp-controller="AdminDashboard" asp-action="Revenue" method="get" class="d-flex">
-        <input type="text" name="msg" class="form-control me-2" placeholder="Nhập tin nhắn / từ khóa" />
-        <input type="hidden" name="viewByEmployee" value="@(Model?.ViewByEmployee ?? false)" />
-        <button type="submit" class="btn btn-success">Gửi</button>
-    </form>
 
 
     @if (Model != null)

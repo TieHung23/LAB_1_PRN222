@@ -1,0 +1,48 @@
+﻿@using EVDMS.Presentation.Models.ViewModels
+@model List<RevenueDataViewModel>
+@{
+    ViewData["Title"] = "Báo cáo Doanh thu AI";
+    var totalRevenue = Model.Sum(x => x.Revenue);
+}
+
+<div class="container mt-4">
+    <h1 class="display-4">@ViewData["Title"]</h1>
+    <hr />
+
+    <form asp-controller="AdminDashboard" asp-action="RevenueAI" method="post">
+        <div class="mb-3">
+            <label for="message" class="form-label">Nhập lời nhắn cho AI:</label>
+            <textarea class="form-control" id="message" name="message" rows="4"></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Gửi</button>
+    </form>
+
+    <hr />
+    <h3>Dữ liệu đã load:</h3>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>DealerName</th>
+                <th>AccountName</th>
+                <th>Revenue</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.DealerName</td>
+                    <td>@item.AccountName</td>
+                    <td>@item.Revenue.ToString("N0") VND</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr class="fw-bold">
+                <td colspan="2" class="text-end">Tổng cộng:</td>
+                <td>@totalRevenue.ToString("N0") VND</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
