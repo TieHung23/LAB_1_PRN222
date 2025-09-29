@@ -68,5 +68,10 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _orderRepository.GetByIdAsync(id);
         }
+
+        public async Task<List<Order>> GetAllOrder()
+        {
+            return await _orderRepository.GetAllOrder();
+        }
     }
 }

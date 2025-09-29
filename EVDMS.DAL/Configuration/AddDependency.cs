@@ -30,5 +30,6 @@ public static class AddDependency
         services.AddScoped<ITestDriveRepository, TestDriveRepository>();
         services.AddScoped<IInventoryRepository, InventoryRepository>();
         services.AddScoped<IPromotionRepository, PromotionRepository>();
+        services.AddScoped<IRawSQL, RawSQL>();
     }
 }
