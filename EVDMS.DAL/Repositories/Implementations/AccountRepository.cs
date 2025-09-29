@@ -99,7 +99,7 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Include(a => a.Role)
                                  .Include(a => a.Dealer)
                                  .ToListAsync();
-
+        }
         public async Task<bool> IsUserExist(string userName)
         {
             var result = await _context.Accounts.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
