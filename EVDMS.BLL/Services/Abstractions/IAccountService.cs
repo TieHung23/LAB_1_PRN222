@@ -19,5 +19,6 @@ namespace EVDMS.BLL.Services.Abstractions
         Task<IEnumerable<Account>> GetDeletedAccountsAsync();
         Task RestoreAccountAsync(Guid id);
         Task<IEnumerable<Account>> GetAccountsByDealerAsync(Guid dealerId);
+        Task<bool> IsUserNameExist(string userName);
     }
 }

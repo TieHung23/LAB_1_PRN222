@@ -1,0 +1,49 @@
+﻿@model IFormFile
+
+@{
+    ViewData["Title"] = "Nhập tài khoản từ Excel";
+}
+
+<h2>@ViewData["Title"]</h2>
+<hr />
+
+<form asp-action="Import" method="post" enctype="multipart/form-data">
+    <div class="form-group mb-3">
+        <label for="file">Chọn file Excel</label>
+        <input type="file" name="file" class="form-control" accept=".xlsx,.xls" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Tải lên</button>
+    <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@if (ViewBag.Preview != null)
+{
+    <h3 class="mt-4">Dữ liệu trong file</h3>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>UserName</th>
+                <th>Password</th>
+                <th>FullName</th>
+                <th>RoleId</th>
+                <th>DealerId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.Preview)
+            {
+                <tr>
+                    <td>@item.UserName</td>
+                    <td>@item.Password</td>
+                    <td>@item.FullName</td>
+                    <td>@item.RoleId</td>
+                    <td>@item.DealerId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <form asp-action="ConfirmImport" method="post">
+        <button type="submit" class="btn btn-success">Xác nhận import</button>
+    </form>
+}

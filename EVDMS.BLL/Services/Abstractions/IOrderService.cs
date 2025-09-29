@@ -17,5 +17,6 @@ namespace EVDMS.BLL.Services.Abstractions
         Task<decimal> GetTotalRevenueByDealerIdAsync(Guid dealerId);
         Task<IEnumerable<Order>> GetOrdersByDealerIdAsync(Guid dealerId);
         Task<List<(Account Staff, decimal Revenue)>> GetStaffRevenuesByDealerAsync(Guid dealerId);
+        Task<List<Order>> GetAllOrder();
     }
 }

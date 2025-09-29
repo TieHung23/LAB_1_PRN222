@@ -26,14 +26,14 @@ namespace EVDMS.DAL.Repositories.Implementations
 
         public async Task<IEnumerable<Account>> GetAccounts(string searchTerm)
         {
-          
+
             var query = _context.Accounts
                                 .Where(a => !a.IsDeleted)
                                 .Include(a => a.Role)
                                 .Include(a => a.Dealer)
                                 .AsQueryable();
 
-            
+
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 query = query.Where(a => a.UserName.Contains(searchTerm) || a.FullName.Contains(searchTerm));
@@ -78,7 +78,7 @@ namespace EVDMS.DAL.Repositories.Implementations
         public async Task<IEnumerable<Account>> GetDeletedAccountsAsync()
         {
             return await _context.Accounts
-                                 .Where(a => a.IsDeleted) 
+                                 .Where(a => a.IsDeleted)
                                  .Include(a => a.Role)
                                  .Include(a => a.Dealer)
                                  .ToListAsync();
@@ -86,10 +86,11 @@ namespace EVDMS.DAL.Repositories.Implementations
 
         public async Task RestoreAsync(Account account)
         {
-            account.IsDeleted = false; 
+            account.IsDeleted = false;
             _context.Accounts.Update(account);
             await _context.SaveChangesAsync();
         }
+
 
         public async Task<IEnumerable<Account>> GetAccountsByDealerAsync(Guid dealerId)
         {
@@ -98,6 +99,13 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Include(a => a.Role)
                                  .Include(a => a.Dealer)
                                  .ToListAsync();
+
+        public async Task<bool> IsUserExist(string userName)
+        {
+            var result = await _context.Accounts.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
+
+            return result == null ? false : true;
+
         }
     }
 }
