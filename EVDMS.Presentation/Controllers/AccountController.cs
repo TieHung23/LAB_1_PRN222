@@ -65,7 +65,11 @@ namespace EVDMS.Presentation.Controllers
                         return RedirectToAction("Index", "AdminDashboard");
 
                     case "Dealer Manager":
+
+                        return RedirectToAction("Index", "ManagerDashboard");  
+
                     case "Dealer Staff":
+
                         return RedirectToAction("Index", "SalesDashboard");
 
                     default:

@@ -18,6 +18,10 @@ namespace EVDMS.DAL.Repositories.Abstractions
         Task<Account> GetByIdWithDetailsAsync(Guid id);
         Task<IEnumerable<Account>> GetDeletedAccountsAsync();
         Task RestoreAsync(Account account);
+
+        Task<IEnumerable<Account>> GetAccountsByDealerAsync(Guid dealerId);
+
         Task<bool> IsUserExist(string userName);
+
     }
 }

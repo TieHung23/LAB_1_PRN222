@@ -1,0 +1,28 @@
+﻿@model EVDMS.Core.Entities.Account
+
+@{
+    ViewData["Title"] = "Xóa Staff";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-4">
+    <h1 class="text-danger">Xóa Staff</h1>
+    <p>Bạn có chắc muốn xóa staff này?</p>
+
+    <dl class="row">
+        <dt class="col-sm-3">Tên đăng nhập</dt>
+        <dd class="col-sm-9">@Model.UserName</dd>
+
+        <dt class="col-sm-3">Họ tên</dt>
+        <dd class="col-sm-9">@Model.FullName</dd>
+
+        <dt class="col-sm-3">Role</dt>
+        <dd class="col-sm-9">@Model.Role?.Name</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Xóa</button>
+        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+    </form>
+</div>

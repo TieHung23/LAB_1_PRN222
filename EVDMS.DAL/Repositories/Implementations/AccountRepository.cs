@@ -91,11 +91,21 @@ namespace EVDMS.DAL.Repositories.Implementations
             await _context.SaveChangesAsync();
         }
 
+
+        public async Task<IEnumerable<Account>> GetAccountsByDealerAsync(Guid dealerId)
+        {
+            return await _context.Accounts
+                                 .Where(a => !a.IsDeleted && a.DealerId == dealerId)
+                                 .Include(a => a.Role)
+                                 .Include(a => a.Dealer)
+                                 .ToListAsync();
+
         public async Task<bool> IsUserExist(string userName)
         {
             var result = await _context.Accounts.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
 
             return result == null ? false : true;
+
         }
     }
 }
