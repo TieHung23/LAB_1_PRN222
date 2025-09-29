@@ -68,5 +68,27 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _orderRepository.GetByIdAsync(id);
         }
+
+
+        public async Task<decimal> GetTotalRevenueByDealerIdAsync(Guid dealerId)
+        {
+            return await _orderRepository.GetTotalRevenueByDealerIdAsync(dealerId);
+        }
+
+        public async Task<IEnumerable<Order>> GetOrdersByDealerIdAsync(Guid dealerId)
+        {
+            return await _orderRepository.GetOrdersByDealerIdAsync(dealerId);
+        }
+
+        public async Task<List<(Account Staff, decimal Revenue)>> GetStaffRevenuesByDealerAsync(Guid dealerId)
+        {
+            return await _orderRepository.GetStaffRevenuesByDealerAsync(dealerId);
+        }
+
+        public async Task<List<Order>> GetAllOrder()
+        {
+            return await _orderRepository.GetAllOrder();
+
+        }
     }
 }

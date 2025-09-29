@@ -86,6 +86,11 @@ namespace EVDMS.BLL.Services.Implementations
             }
         }
 
+        public async Task<IEnumerable<Account>> GetAccountsByDealerAsync(Guid dealerId)
+        {
+            return await _accountRepository.GetAccountsByDealerAsync(dealerId);
+        }
+
         public async Task<bool> IsUserNameExist(string userName)
         {
             return await _accountRepository.IsUserExist(userName);
