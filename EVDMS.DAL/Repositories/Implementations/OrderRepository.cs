@@ -99,7 +99,6 @@ namespace EVDMS.DAL.Repositories.Implementations
             var result = await query.ToListAsync();
             return result.Select(r => (r.Staff, r.Revenue)).ToList();
         }
-
         public async Task<List<Order>> GetAllOrder()
         {
             return await _context.Orders
