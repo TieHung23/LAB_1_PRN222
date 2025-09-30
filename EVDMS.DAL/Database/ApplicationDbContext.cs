@@ -141,16 +141,16 @@ public class ApplicationDbContext : DbContext
             dealers.Add(new Dealer { Id = NewGuid(1, i), Code = $"DLR00{i}", Name = $"Auto-{i}", Address = $"{i} Street", PhoneNumber = $"12345678{i}", Email = $"dealer{i}@email.com", Region = "North", IsActive = true, IsDeleted = false, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
         }
         modelBuilder.Entity<Dealer>().HasData(dealers);
-
+        var defaultHashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.";
         // Seed Dealer Accounts (10)
         var dealerAccounts = new List<Account>();
         for (int i = 0; i < 5; i++)
         {
             var dealerId = dealers[i].Id;
             // Manager Account
-            dealerAccounts.Add(new Account { Id = NewGuid(2, i * 2 + 1), UserName = $"manager{i + 1}", HashedPassword = "hash", FullName = $"Manager {i + 1}", IsActive = true, IsDeleted = false, DealerId = dealerId, RoleId = dealerManagerRoleId, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
+            dealerAccounts.Add(new Account { Id = NewGuid(2, i * 2 + 1), UserName = $"manager{i + 1}", HashedPassword = defaultHashedPassword, FullName = $"Manager {i + 1}", IsActive = true, IsDeleted = false, DealerId = dealerId, RoleId = dealerManagerRoleId, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
             // Staff Account
-            dealerAccounts.Add(new Account { Id = NewGuid(2, i * 2 + 2), UserName = $"staff{i + 1}", HashedPassword = "hash", FullName = $"Staff {i + 1}", IsActive = true, IsDeleted = false, DealerId = dealerId, RoleId = dealerStaffRoleId, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
+            dealerAccounts.Add(new Account { Id = NewGuid(2, i * 2 + 2), UserName = $"staff{i + 1}", HashedPassword = defaultHashedPassword, FullName = $"Staff {i + 1}", IsActive = true, IsDeleted = false, DealerId = dealerId, RoleId = dealerStaffRoleId, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
         }
         modelBuilder.Entity<Account>().HasData(dealerAccounts);
 
@@ -164,26 +164,110 @@ public class ApplicationDbContext : DbContext
 
         // Seed VehicleConfigs (5)
         var vehicleConfigs = new List<VehicleConfig>();
-        for (int i = 1; i <= 5; i++)
-        {
-            vehicleConfigs.Add(new VehicleConfig { Id = NewGuid(4, i), VersionName = "Standard", Color = "White", InteriorType = "Cloth", BasePrice = 35000, WarrantyPeriod = 36, IsDeleted = false, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
-        }
-        modelBuilder.Entity<VehicleConfig>().HasData(vehicleConfigs);
-
-        // Seed VehicleModels (5)
         var vehicleModels = new List<VehicleModel>();
-        for (int i = 1; i <= 5; i++)
-        {
-            vehicleModels.Add(new VehicleModel { Id = NewGuid(5, i), ModelName = $"Model {i}", Brand = "Tesla", VehicleType = "Sedan", Description = "Description", ReleaseYear = 2022, IsActive = true, IsDeleted = false, VehicleConfigId = vehicleConfigs[i - 1].Id, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, ImgUrl = "Hahahaha" });
-        }
-        modelBuilder.Entity<VehicleModel>().HasData(vehicleModels);
-
-        // Seed Inventories (5)
         var inventories = new List<Inventory>();
+
+        // --- Giữ lại 5 xe Tesla gốc cho 5 đại lý đầu tiên ---
         for (int i = 1; i <= 5; i++)
         {
-            inventories.Add(new Inventory { Id = NewGuid(6, i), VehicleModelId = vehicleModels[i - 1].Id, DealerId = dealers[i - 1].Id, IsSale = true, Description = "New arrival", CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
+            var config = new VehicleConfig { Id = NewGuid(4, i), VersionName = "Standard", Color = "White", InteriorType = "Cloth", BasePrice = 35000 + (i * 1000), WarrantyPeriod = 36, IsDeleted = false, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId };
+            vehicleConfigs.Add(config);
+
+            var model = new VehicleModel { Id = NewGuid(5, i), ModelName = $"Model {i}", Brand = "Tesla", VehicleType = "Sedan", Description = "Description", ReleaseYear = 2022, IsActive = true, IsDeleted = false, VehicleConfigId = config.Id, CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, ImgUrl = "https://digitalassets.tesla.com/tesla-contents/image/upload/h_1800,w_2880,q_auto:best,f_auto,dpr_2.0/v1/content/dam/tesla/CAR_ASSETS/MODEL_S/U004_Paint_S_desktop.png" };
+            vehicleModels.Add(model);
+
+            inventories.Add(new Inventory { Id = NewGuid(6, i), VehicleModelId = model.Id, DealerId = dealers[i - 1].Id, IsSale = true, Description = "New arrival", CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId });
         }
+
+        // --- Dữ liệu xe mới ---
+        var newBrands = new List<string> { "VinFast", "BMW", "Hyundai" };
+        var modelNames = new Dictionary<string, List<string>>
+{
+    { "VinFast", new List<string> { "VF 8", "VF 9", "VF e34", "VF 5", "VF 6", "VF 7" } },
+    { "BMW", new List<string> { "iX", "i4", "i7", "iX3", "iX1" } },
+    { "Hyundai", new List<string> { "Ioniq 5", "Ioniq 6", "Kona Electric" } }
+};
+        var vehicleTypes = new List<string> { "SUV", "Sedan", "Hatchback", "Crossover" };
+        var colors = new List<string> { "Black", "Red", "Blue", "Silver", "Gray" };
+        var interiors = new List<string> { "Leather", "Premium Fabric", "Suede" };
+        var imgUrls = new Dictionary<string, string>
+{
+    {"VF 8", "https://shop.vinfastauto.com/on/demandware.static/-/Sites-app_vinfast_vn-Library/default/dw159f3640/images/v8/img-exterior.png"},
+    {"VF 9", "https://shop.vinfastauto.com/on/demandware.static/-/Sites-app_vinfast_vn-Library/default/dw053c0704/images/v9/img-exterior-v2.png"},
+    {"iX", "https://www.bmw.vn/content/dam/bmw/common/all-models/i-series/ix/2021/navigation/bmw-i-series-ix-modelfinder.png"},
+    {"Ioniq 5", "https://media.hatvan.com/uploads/2021/05/hyundai-ioniq-5-ev-2022-1620958197.png"}
+};
+
+
+        int modelCounter = 6;
+        int inventoryCounter = 6;
+
+        // Lặp qua từng mẫu xe mới
+        foreach (var brand in newBrands)
+        {
+            foreach (var modelName in modelNames[brand])
+            {
+                // --- TẠO XE VÀ CẤU HÌNH (Không dùng Random) ---
+                var newConfig = new VehicleConfig
+                {
+                    Id = NewGuid(4, modelCounter),
+                    VersionName = "Plus",
+                    Color = colors[modelCounter % colors.Count], // Dùng toán tử chia lấy dư để lặp lại màu
+                    InteriorType = interiors[modelCounter % interiors.Count], // Dùng toán tử chia lấy dư để lặp lại nội thất
+                    BasePrice = 40000 + (modelCounter % 20) * 1000, // Giá thay đổi nhưng có thể dự đoán
+                    WarrantyPeriod = 48,
+                    CreatedAt = seedDate,
+                    CreatedAtTick = seedDateTicks,
+                    CreatedById = systemUserId,
+                    UpdatedAt = seedDate,
+                    UpdatedAtTick = seedDateTicks,
+                    UpdatedById = systemUserId
+                };
+                vehicleConfigs.Add(newConfig);
+
+                var newModel = new VehicleModel
+                {
+                    Id = NewGuid(5, modelCounter),
+                    ModelName = modelName,
+                    Brand = brand,
+                    VehicleType = vehicleTypes[modelCounter % vehicleTypes.Count],
+                    Description = $"A new electric car from {brand}",
+                    ReleaseYear = 2023,
+                    IsActive = true,
+                    VehicleConfigId = newConfig.Id,
+                    CreatedAt = seedDate,
+                    CreatedAtTick = seedDateTicks,
+                    CreatedById = systemUserId,
+                    ImgUrl = imgUrls.ContainsKey(modelName) ? imgUrls[modelName] : "https://via.placeholder.com/600x400.png?text=No+Image"
+                };
+                vehicleModels.Add(newModel);
+
+                // --- THÊM XE VÀO KHO CỦA TẤT CẢ ĐẠI LÝ ---
+                foreach (var dealer in dealers)
+                {
+                    inventories.Add(new Inventory
+                    {
+                        Id = NewGuid(6, inventoryCounter),
+                        VehicleModelId = newModel.Id,
+                        DealerId = dealer.Id,
+                        IsSale = true,
+                        Description = "Available for test drive",
+                        CreatedAt = seedDate,
+                        CreatedAtTick = seedDateTicks,
+                        CreatedById = systemUserId,
+                        UpdatedAt = seedDate,
+                        UpdatedAtTick = seedDateTicks,
+                        UpdatedById = systemUserId
+                    });
+                    inventoryCounter++;
+                }
+
+                modelCounter++;
+            }
+        }
+
+        modelBuilder.Entity<VehicleConfig>().HasData(vehicleConfigs);
+        modelBuilder.Entity<VehicleModel>().HasData(vehicleModels);
         modelBuilder.Entity<Inventory>().HasData(inventories);
 
         // Seed Promotions (5)
