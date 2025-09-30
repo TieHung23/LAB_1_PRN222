@@ -35,10 +35,16 @@
                             </li>
                           
                         }
-                        else if (User.IsInRole("Dealer Manager") || User.IsInRole("Dealer Staff"))
+                        else if ( User.IsInRole("Dealer Staff"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="SalesDashboard" asp-action="Index">Bảng điều khiển</a>
+                            </li>
+                        }
+                        else if (User.IsInRole("Dealer Manager") )
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="ManagerDashboard" asp-action="Index">Bảng điều khiển</a>
                             </li>
                         }
                     </ul>

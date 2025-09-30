@@ -4,6 +4,7 @@ using EVDMS.DAL.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EVDMS.DAL.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250930031022_AddVehicleToAllDealers")]
+    partial class AddVehicleToAllDealers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,7 +122,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0001-0000-0000-000000000000"),
                             FullName = "Manager 1",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("22222222-2222-2222-2222-222222222222"),
@@ -136,7 +139,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0001-0000-0000-000000000000"),
                             FullName = "Staff 1",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111"),
@@ -153,7 +156,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0002-0000-0000-000000000000"),
                             FullName = "Manager 2",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("22222222-2222-2222-2222-222222222222"),
@@ -170,7 +173,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0002-0000-0000-000000000000"),
                             FullName = "Staff 2",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111"),
@@ -187,7 +190,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0003-0000-0000-000000000000"),
                             FullName = "Manager 3",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("22222222-2222-2222-2222-222222222222"),
@@ -204,7 +207,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0003-0000-0000-000000000000"),
                             FullName = "Staff 3",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111"),
@@ -221,7 +224,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0004-0000-0000-000000000000"),
                             FullName = "Manager 4",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("22222222-2222-2222-2222-222222222222"),
@@ -238,7 +241,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0004-0000-0000-000000000000"),
                             FullName = "Staff 4",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111"),
@@ -255,7 +258,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0005-0000-0000-000000000000"),
                             FullName = "Manager 5",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("22222222-2222-2222-2222-222222222222"),
@@ -272,7 +275,7 @@ namespace EVDMS.DAL.Migrations
                             CreatedById = new Guid("00000000-0000-0000-0000-000000000000"),
                             DealerId = new Guid("00000001-0005-0000-0000-000000000000"),
                             FullName = "Staff 5",
-                            HashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.",
+                            HashedPassword = "hash",
                             IsActive = true,
                             IsDeleted = false,
                             RoleId = new Guid("11111111-1111-1111-1111-111111111111"),
