@@ -84,7 +84,6 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _orderRepository.GetStaffRevenuesByDealerAsync(dealerId);
         }
-
         public async Task<List<Order>> GetAllOrder()
         {
             return await _orderRepository.GetAllOrder();
