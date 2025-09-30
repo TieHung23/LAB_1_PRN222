@@ -15,14 +15,11 @@
 
         <dt class="col-sm-3">Họ tên</dt>
         <dd class="col-sm-9">@Model.FullName</dd>
-
-        <dt class="col-sm-3">Role</dt>
-        <dd class="col-sm-9">@Model.Role?.Name</dd>
     </dl>
 
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="Id" />
-        <button type="submit" class="btn btn-danger">Xóa</button>
-        <a asp-action="Index" class="btn btn-secondary">Hủy</a>
+        <input type="submit" value="Xóa" class="btn btn-danger" />
+        <a asp-action="Accounts" class="btn btn-secondary">Hủy bỏ</a>
     </form>
 </div>
