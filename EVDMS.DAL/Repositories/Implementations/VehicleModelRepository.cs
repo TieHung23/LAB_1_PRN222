@@ -47,5 +47,38 @@ namespace EVDMS.DAL.Repositories.Implementations
                                  .Include(vm => vm.VehicleConfig) 
                                  .FirstOrDefaultAsync(vm => vm.Id == id);
         }
+
+        public async Task<VehicleModel> CreateAsync(VehicleModel vehicleModel)
+        {
+            _context.VehicleModels.Add(vehicleModel);
+            await _context.SaveChangesAsync();
+            return vehicleModel;
+        }
+
+        public async Task UpdateAsync(VehicleModel vehicleModel)
+        {
+            // Đánh dấu đối tượng là đã bị thay đổi
+            _context.Entry(vehicleModel).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            var vehicleModel = await _context.VehicleModels.FindAsync(id);
+            if (vehicleModel != null)
+            {
+                // Thực hiện soft-delete thay vì xóa cứng
+                vehicleModel.IsDeleted = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<IEnumerable<VehicleModel>> SearchByNameAsync(string modelName)
+        {
+            return await _context.VehicleModels
+                .Where(vm => !vm.IsDeleted && vm.IsActive && vm.ModelName.Contains(modelName))
+                .OrderBy(vm => vm.ModelName)
+                .ToListAsync();
+        }
     }
 }

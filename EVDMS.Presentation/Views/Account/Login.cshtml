@@ -2,35 +2,191 @@
 
 @{
     ViewData["Title"] = "Đăng nhập";
-    // Sử dụng layout trống để trang đăng nhập không có header và footer
     Layout = "~/Views/Shared/_LayoutBlank.cshtml";
 }
+
+<style>
+    :root {
+        --primary-color: #00c0e0;
+        --dark-bg: #1a1a1a;
+        --card-bg: rgba(255, 255, 255, 0.05);
+        --border-color: rgba(255, 255, 255, 0.2);
+        --text-color: #f0f0f0;
+        --input-bg: rgba(0, 0, 0, 0.3);
+    }
+
+    body.login-body {
+        background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-color);
+    }
+
+    /* Keyframes for animated gradient background */
+    @@keyframes gradientBG {
+        0% {
+            background-position: 0% 50%;
+        }
+
+        50% {
+            background-position: 100% 50%;
+        }
+
+        100% {
+            background-position: 0% 50%;
+        }
+    }
+
+    .login-container {
+        display: flex; /* */
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 2.5rem;
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        color: var(--text-color);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+        .login-header .logo-icon {
+            font-size: 4rem;
+            color: var(--primary-color);
+            text-shadow: 0 0 15px var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .login-header h2 {
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+    .input-group-with-icon {
+        position: relative;
+    }
+
+        .input-group-with-icon .form-control {
+            padding-left: 2.75rem;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            border-radius: 0.5rem;
+        }
+
+            .input-group-with-icon .form-control::placeholder {
+                color: rgba(255,255,255,0.5);
+            }
+
+            .input-group-with-icon .form-control:focus {
+                background-color: var(--input-bg);
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.25rem rgba(0, 192, 224, 0.25);
+                color: var(--text-color);
+            }
+
+        .input-group-with-icon .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--border-color);
+            transition: color 0.3s ease;
+        }
+
+        .input-group-with-icon .form-control:focus ~ .input-icon {
+            color: var(--primary-color);
+        }
+
+    /* Remove floating label behavior and use placeholders */
+    .form-floating > label {
+        display: none;
+    }
+
+    .btn-primary {
+        background: var(--primary-color);
+        border-color: var(--primary-color);
+        font-weight: 600;
+        padding: 0.75rem;
+        border-radius: 0.5rem;
+        transition: background-color 0.3s, box-shadow 0.3s, transform 0.2s;
+    }
+
+        .btn-primary:hover {
+            background-color: #00d9ff;
+            border-color: #00d9ff;
+            box-shadow: 0 0 20px rgba(0, 192, 224, 0.5);
+            transform: translateY(-2px);
+        }
+
+    .login-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+    }
+
+        .login-footer a {
+            color: var(--border-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+            .login-footer a:hover {
+                color: var(--primary-color);
+            }
+</style>
+
+<script>document.body.classList.add('login-body');</script>
 
 <div class="login-container">
     <div class="login-card">
         <div class="login-header">
-            <i class="fas fa-user-circle"></i>
-            <h2>Đăng nhập</h2>
+            <div class="logo-icon">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <h2>Chào mừng đến với Cortexa</h2>
+            <p class="text-muted">Đăng nhập để tiếp tục</p>
         </div>
         <section>
             <form id="account" method="post">
-                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-                <div class="form-floating mb-3">
-                    <input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Tên đăng nhập" />
-                    <label asp-for="UserName">Tên đăng nhập</label>
-                    <span asp-validation-for="UserName" class="text-danger"></span>
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger text-center p-2 mb-3" role="alert"></div>
+
+                <div class="mb-3 input-group-with-icon">
+                    [cite_start]<input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Tên đăng nhập" /> [cite: 3]
+                    <i class="fas fa-user input-icon"></i>
+                    <span asp-validation-for="UserName" class="text-danger small mt-1"></span>
                 </div>
-                <div class="form-floating mb-3">
-                    <input asp-for="Password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Mật khẩu" />
-                    <label asp-for="Password">Mật khẩu</label>
-                    <span asp-validation-for="Password" class="text-danger"></span>
+
+                <div class="mb-4 input-group-with-icon">
+                    <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Mật khẩu" />
+                    <i class="fas fa-lock input-icon"></i>
+                    <span asp-validation-for="Password" class="text-danger small mt-1"></span>
                 </div>
-                <div class="mt-4">
-                    <button id="login-submit" type="submit" class="w-100 btn btn-primary btn-lg">Đăng nhập</button>
-                    <a asp-controller="Home" asp-action="Index" class="btn btn-link w-100 mt-2">Quay về trang chủ</a>
+
+                <div class="d-grid">
+                    <button id="login-submit" type="submit" class="btn btn-primary btn-lg">Đăng nhập</button>
                 </div>
             </form>
         </section>
+
+        <div class="login-footer">
+            <a asp-controller="Home" asp-action="Index">
+                <i class="fas fa-arrow-left me-1"></i> Quay về trang chủ
+            </a>
+        </div>
     </div>
 </div>
 
