@@ -1,14 +1,15 @@
 ﻿@model IEnumerable<EVDMS.Core.Entities.VehicleModel>
 
 @{
-    ViewData["Title"] = "Trang Chủ";
+    ViewData["Title"] = "Trang Chủ - Hệ thống quản lý đại lý xe điện Cortexa";
 }
 
 <style>
-  
+    /* --- Hero Section Styles --- */
     .hero-section {
         height: 70vh;
         display: flex;
+        [cite_start] /* [cite: 2] */
         align-items: center;
         justify-content: center;
         text-align: center;
@@ -16,7 +17,8 @@
         position: relative;
         border-radius: 15px;
         overflow: hidden;
-        margin-bottom: 5rem; 
+        margin-bottom: 5rem;
+        [cite_start] /* [cite: 2] */
     }
 
     .hero-video {
@@ -24,12 +26,14 @@
         top: 50%;
         left: 50%;
         min-width: 100%;
+        [cite_start] /* [cite: 4] */
         min-height: 100%;
         width: auto;
         height: auto;
         z-index: -100;
         transform: translateX(-50%) translateY(-50%);
         background-size: cover;
+        [cite_start] /* [cite: 4] */
     }
 
     .hero-overlay {
@@ -37,22 +41,28 @@
         top: 0;
         left: 0;
         right: 0;
+        [cite_start] /* [cite: 6] */
         bottom: 0;
         background: radial-gradient(ellipse at center, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 100%);
+        [cite_start] /* [cite: 6] */
     }
 
     .hero-content {
         position: relative;
         z-index: 1;
+        [cite_start] /* [cite: 7] */
     }
 
         .hero-content h1 {
             font-size: 4rem;
+            [cite_start] /* [cite: 8] */
             font-weight: 700;
+            [cite_start] /* [cite: 9] */
             text-shadow: 0 0 15px #00d9ff;
         }
- 
-    .product-section {
+
+    /* --- General Section Styles --- */
+    .feature-section {
         padding: 60px 0;
     }
 
@@ -61,83 +71,98 @@
         margin-bottom: 50px;
         font-size: 2.5rem;
         color: #00c0e0;
+        [cite_start] /* [cite: 11] */
         text-transform: uppercase;
         letter-spacing: 2px;
         font-weight: 700;
     }
 
+    /* --- Product Card Styles --- */
     .product-card {
         background-color: #2c2c2c;
+        [cite_start] /* [cite: 11] */
         border: 1px solid #444;
+        [cite_start] /* [cite: 12] */
         border-radius: 15px;
         overflow: hidden;
         text-align: center;
         transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.5s ease, transform 0.5s ease;
-        opacity: 0; 
+        [cite_start] /* [cite: 13] */
+        opacity: 0;
         transform: translateY(50px);
     }
 
         .product-card.is-visible {
             opacity: 1;
             transform: translateY(0);
+            [cite_start] /* [cite: 15] */
         }
 
         .product-card:hover {
             transform: translateY(-10px);
             box-shadow: 0 10px 30px rgba(0, 192, 224, 0.4);
+            [cite_start] /* [cite: 16] */
         }
 
         .product-card img {
             width: 100%;
             height: 200px;
+            [cite_start] /* [cite: 17] */
             object-fit: cover;
             border-bottom: 2px solid #00c0e0;
         }
 
     .product-card-body {
         padding: 20px;
+        [cite_start] /* [cite: 17] */
     }
 
         .product-card-body h5 {
             color: #00c0e0;
             font-size: 1.5rem;
+            [cite_start] /* [cite: 19] */
             margin-bottom: 15px;
         }
 
+    /* --- Feature Icon Styles --- */
+    .feature-icon {
+        font-size: 3rem;
+        color: #00c0e0;
+        margin-bottom: 1rem;
+    }
 </style>
 
-<div class="hero-section">
+<header class="hero-section">
     <div class="hero-overlay"></div>
-
-    @* --- BẮT ĐẦU CẬP NHẬT VIDEO --- *@
     <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop" class="hero-video" poster="https://images.unsplash.com/photo-1617704548623-0f42d38a41b5?q=80&w=2070&auto-format&fit=crop">
-        @* Thay thế link video cũ bằng đường dẫn video trong project *@
         <source src="~/videos/Xe dien may - Made with Clipchamp.mp4" type="video/mp4">
         Trình duyệt của bạn không hỗ trợ video.
     </video>
-    @* --- KẾT THÚC CẬP NHẬT VIDEO --- *@
-
     <div class="hero-content">
         <h1 class="display-4">Cortexa - Kỷ nguyên di chuyển bằng điện</h1>
         <p class="lead">Hệ thống quản lý đại lý xe điện hàng đầu Việt Nam.</p>
-        <p><a href="#" class="btn btn-primary btn-lg">Khám phá ngay &raquo;</a></p>
+        <p><a asp-controller="Vehicle" asp-action="Index" class="btn btn-primary btn-lg">Khám phá các dòng xe &raquo;</a></p>
     </div>
-</div>
+</header>
 
 @if (Model != null && Model.Any())
 {
-    <div class="container product-section">
+    <div class="container feature-section">
         <h2 class="section-title">Dòng xe nổi bật</h2>
+
         <div class="row">
             @foreach (var car in Model)
             {
-                <div class="col-md-4 mb-4">
+                <div class="col-lg-4 col-md-6 mb-4">
                     <div class="product-card">
                         <img src="@(car.ImgUrl ?? "https://via.placeholder.com/400x250.png?text=Cortexa+EV")" alt="@car.ModelName">
-                        <div class="product-card-body">
+
+                        <div class="product-card-body d-flex flex-column" style="min-height: 250px;">
                             <h5>@car.ModelName</h5>
-                            <p>@car.Description</p>
-                            <a href="#" class="btn btn-primary">Xem chi tiết</a>
+                            <p class="text-muted">@car.Description</p>
+                            <div class="mt-auto">
+                                <a asp-controller="Vehicle" asp-action="Details" asp-route-id="@car.Id" class="btn btn-primary">Xem chi tiết</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -146,18 +171,46 @@
     </div>
 }
 
+<div class="bg-dark text-light">
+    <div class="container feature-section">
+        <h2 class="section-title">Tại sao chọn Cortexa</h2>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="product-card p-4">
+                    <i class="fas fa-tachometer-alt feature-icon"></i>
+                    <h4>Quản lý hiệu quả</h4>
+                    <p>Theo dõi doanh số, tồn kho và hiệu suất nhân viên một cách trực quan và chính xác.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="product-card p-4">
+                    <i class="fas fa-users feature-icon"></i>
+                    <h4>Tương tác khách hàng</h4>
+                    <p>Lưu trữ và quản lý thông tin khách hàng tiềm năng, hỗ trợ các chiến dịch marketing hiệu quả.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="product-card p-4">
+                    <i class="fas fa-chart-line feature-icon"></i>
+                    <h4>Báo cáo thông minh</h4>
+                    <p>Hệ thống báo cáo tự động giúp ban lãnh đạo đưa ra các quyết định kinh doanh kịp thời.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
     <script>
-      
         document.addEventListener("DOMContentLoaded", function() {
             const cards = document.querySelectorAll('.product-card');
 
+            // --- Intersection Observer Logic ---
             const observerOptions = {
-                root: null, 
+                root: null,
                 rootMargin: '0px',
-                threshold: 0.1 
+                threshold: 0.1
             };
-
             const observer = new IntersectionObserver((entries, observer) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -166,7 +219,6 @@
                     }
                 });
             }, observerOptions);
-
             cards.forEach(card => {
                 observer.observe(card);
             });

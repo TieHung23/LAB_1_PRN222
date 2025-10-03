@@ -31,5 +31,25 @@ namespace EVDMS.BLL.Services.Implementations
         {
             return await _vehicleModelRepository.GetByIdAsync(id);
         }
+
+        public async Task<VehicleModel> CreateAsync(VehicleModel vehicleModel)
+        {
+            return await _vehicleModelRepository.CreateAsync(vehicleModel);
+        }
+
+        public async Task UpdateAsync(VehicleModel vehicleModel)
+        {
+            await _vehicleModelRepository.UpdateAsync(vehicleModel);
+        }
+
+        public async Task DeleteAsync(Guid id)
+        {
+            await _vehicleModelRepository.DeleteAsync(id);
+        }
+
+        public async Task<IEnumerable<VehicleModel>> SearchByNameAsync(string modelName)
+        {
+            return await _vehicleModelRepository.SearchByNameAsync(modelName);
+        }
     }
 }

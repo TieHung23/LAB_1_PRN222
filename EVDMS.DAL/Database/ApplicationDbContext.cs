@@ -101,13 +101,14 @@ public class ApplicationDbContext : DbContext
         var seedDate = new DateTime(2024, 1, 1, 0, 0, 0, DateTimeKind.Utc);
         var seedDateTicks = seedDate.Ticks;
         var systemUserId = Guid.Empty;
+        var defaultHashedPassword = "$2a$11$rDTmn7YPiwBqtZssLgFtquuGBlLPLTFKa2YzLrr9j7.rsMCdSulW.";
 
         modelBuilder.Entity<Account>().HasData(
             new Account
             {
                 Id = NewGuid(100, 1),
                 UserName = "admin",
-                HashedPassword = "admin_hash",
+                HashedPassword = defaultHashedPassword,
                 FullName = "System Admin",
                 IsActive = true,
                 IsDeleted = false,
@@ -120,7 +121,23 @@ public class ApplicationDbContext : DbContext
                 UpdatedAtTick = seedDateTicks,
                 UpdatedById = systemUserId
             },
-            new Account { Id = NewGuid(100, 2), UserName = "evmstaff", HashedPassword = "evm_hash", FullName = "EVM Staff Member", IsActive = true, IsDeleted = false, DealerId = null, RoleId = new Guid("33333333-3333-3333-3333-333333333333"), CreatedAt = seedDate, CreatedAtTick = seedDateTicks, CreatedById = systemUserId, UpdatedAt = seedDate, UpdatedAtTick = seedDateTicks, UpdatedById = systemUserId }
+            new Account
+            {
+                Id = NewGuid(100, 2),
+                UserName = "evmstaff",
+                HashedPassword = defaultHashedPassword,
+                FullName = "EVM Staff Member",
+                IsActive = true,
+                IsDeleted = false,
+                DealerId = null,
+                RoleId = new Guid("33333333-3333-3333-3333-333333333333"),
+                CreatedAt = seedDate,
+                CreatedAtTick = seedDateTicks,
+                CreatedById = systemUserId,
+                UpdatedAt = seedDate,
+                UpdatedAtTick = seedDateTicks,
+                UpdatedById = systemUserId
+            }
         );
     }
 
