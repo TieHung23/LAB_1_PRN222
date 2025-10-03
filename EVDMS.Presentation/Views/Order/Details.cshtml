@@ -5,71 +5,126 @@
 }
 
 <div class="container mt-4">
-    <h1>@ViewData["Title"]</h1>
-    <p>Thông tin chi tiết cho đơn hàng được tạo vào ngày @Model.CreatedAt.ToString("dd/MM/yyyy").</p>
+    <!-- Header -->
+    <h1 class="display-5 text-info">
+        <i class="fas fa-file-invoice-dollar"></i> @ViewData["Title"]
+    </h1>
+    <p>Thông tin chi tiết cho đơn hàng được tạo vào ngày <strong>@Model.CreatedAt.ToString("dd/MM/yyyy")</strong>.</p>
     <hr />
 
     <div class="row">
-        <div class="col-md-6">
-            <h4>Thông tin khách hàng</h4>
-            <dl class="row">
-                <dt class="col-sm-4">Họ và tên</dt>
-                <dd class="col-sm-8">@Model.Customer.FullName</dd>
+        <!-- Customer Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark text-light shadow border-0">
+                <div class="card-header text-white" style="background: linear-gradient(90deg,#00d9ff,#007bff);">
+                    <i class="fas fa-user"></i> Thông tin khách hàng
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Họ và tên</dt>
+                        <dd class="col-sm-8">@Model.Customer.FullName</dd>
 
-                <dt class="col-sm-4">Số điện thoại</dt>
-                <dd class="col-sm-8">@Model.Customer.PhoneNumber</dd>
+                        <dt class="col-sm-4">Số điện thoại</dt>
+                        <dd class="col-sm-8">@Model.Customer.PhoneNumber</dd>
 
-                <dt class="col-sm-4">Email</dt>
-                <dd class="col-sm-8">@Model.Customer.Email</dd>
-            </dl>
+                        <dt class="col-sm-4">Email</dt>
+                        <dd class="col-sm-8">@Model.Customer.Email</dd>
+                    </dl>
+                </div>
+            </div>
         </div>
-        <div class="col-md-6">
-            <h4>Thông tin xe</h4>
-            <dl class="row">
-                <dt class="col-sm-4">Mẫu xe</dt>
-                <dd class="col-sm-8">@Model.Inventory.VehicleModel.ModelName</dd>
 
-                <dt class="col-sm-4">Thương hiệu</dt>
-                <dd class="col-sm-8">@Model.Inventory.VehicleModel.Brand</dd>
+        <!-- Vehicle Info -->
+        <div class="col-md-6 mb-4">
+            <div class="card bg-dark text-light shadow border-0">
+                <div class="card-header text-white" style="background: linear-gradient(90deg,#00d9ff,#007bff);">
+                    <i class="fas fa-car"></i> Thông tin xe
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-4">Mẫu xe</dt>
+                        <dd class="col-sm-8">@Model.Inventory.VehicleModel.ModelName</dd>
 
-                <dt class="col-sm-4">Nhân viên bán</dt>
-                <dd class="col-sm-8">@Model.Account.FullName</dd>
-            </dl>
+                        <dt class="col-sm-4">Thương hiệu</dt>
+                        <dd class="col-sm-8">@Model.Inventory.VehicleModel.Brand</dd>
+
+                        <dt class="col-sm-4">Nhân viên bán</dt>
+                        <dd class="col-sm-8">@Model.Account.FullName</dd>
+                    </dl>
+                </div>
+            </div>
         </div>
     </div>
 
-    <hr />
+    <!-- Payment Info -->
+    <div class="card bg-dark text-light shadow border-0">
+        <div class="card-header text-white" style="background: linear-gradient(90deg,#00d9ff,#007bff);">
+            <i class="fas fa-credit-card"></i> Chi tiết thanh toán
+        </div>
+        <div class="card-body">
+            @if (Model.Payment != null)
+            {
+                <table class="table table-dark table-hover align-middle text-light mb-0">
+                    <tbody>
+                        <tr>
+                            <th style="width: 40%;">Giá niêm yết</th>
+                            <td>@Model.Payment.BasePrice.ToString("C0")</td>
+                        </tr>
+                        <tr>
+                            <th>Khuyến mãi áp dụng</th>
+                            <td>
+                                @if (Model.Promotion != null)
+                                {
+                                    <span class="badge bg-info p-2">@Model.Promotion.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary p-2">Không có</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Số tiền giảm giá</th>
+                            <td class="text-danger">- @Model.Payment.DiscountPrice.ToString("C0")</td>
+                        </tr>
+                        <tr class="fw-bold table-success">
+                            <th>TỔNG CỘNG</th>
+                            <td class="h4 text-success">@Model.Payment.FinalPrice.ToString("C0")</td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning mb-0">
+                    <i class="fas fa-exclamation-triangle"></i> Chưa có thông tin thanh toán cho đơn hàng này.
+                </div>
+            }
+        </div>
+    </div>
 
-    <h4>Chi tiết thanh toán</h4>
-    @if (Model.Payment != null)
-    {
-        <table class="table table-bordered" style="max-width: 600px;">
-            <tbody>
-                <tr>
-                    <th style="width: 40%;">Giá niêm yết</th>
-                    <td>@Model.Payment.BasePrice.ToString("C0")</td>
-                </tr>
-                <tr>
-                    <th>Khuyến mãi áp dụng</th>
-                    <td>@(Model.Promotion?.Name ?? "Không có")</td>
-                </tr>
-                <tr>
-                    <th>Số tiền giảm giá</th>
-                    <td class="text-danger">- @Model.Payment.DiscountPrice.ToString("C0")</td>
-                </tr>
-                <tr class="fw-bold">
-                    <th>TỔNG CỘNG</th>
-                    <td class="text-success h4">@Model.Payment.FinalPrice.ToString("C0")</td>
-                </tr>
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="alert alert-warning">Chưa có thông tin thanh toán cho đơn hàng này.</div>
-    }
-
+    <!-- Footer -->
     <div class="mt-4">
-        <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
+        <a asp-action="Index" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left"></i> Quay lại danh sách
+        </a>
     </div>
 </div>
+
+@section Scripts {
+    <style>
+        body {
+            background-color: #2c2c2c;
+            color: #f8f9fa;
+        }
+
+        .table th {
+            color: #00d9ff;
+        }
+
+        .btn-outline-light:hover {
+            background: #00d9ff;
+            color: #fff;
+        }
+    </style>
+}
