@@ -16,7 +16,7 @@ namespace EVDMS.BLL.Services.Implementations
 
         public AccountService(IAccountRepository accountRepository)
         {
-            _accountRepository = accountRepository;
+            _accountRepository = accountRepository; 
         }
 
         public async Task<Account> Login(string username, string password)

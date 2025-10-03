@@ -65,3 +65,16 @@ To get the project up and running on your local machine, follow these steps:
       dotnet run
       ```
     - The application will be available at `https://localhost:5001` or `http://localhost:5000`.
+
+    ## Account Information
+ 1. Administrator Account:
+    - Username: admin
+    - Password: 12345  
+
+ 2. Staff Account:
+    - Username: staff1
+    - Password: 12345
+
+3.Manager Account:
+    - Username: manager1
+    - Password: 12345
