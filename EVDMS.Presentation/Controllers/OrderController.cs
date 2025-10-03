@@ -28,16 +28,33 @@ namespace EVDMS.Presentation.Controllers
 
         public async Task<IActionResult> Index(int? page)
         {
-            var staffIdString = User.FindFirstValue("AccountId");
-            if (Guid.TryParse(staffIdString, out Guid staffId))
+            int pageNumber = page ?? 1;
+            int pageSize = 10;
+
+            if (User.IsInRole("Dealer Manager"))
             {
-                var orders = await _orderService.GetOrdersByStaffIdAsync(staffId);
-                int pageNumber = page ?? 1;
-                int pageSize = 10;
-                return View(orders.ToPagedList(pageNumber, pageSize));
+                var dealerIdString = User.FindFirstValue("DealerId");
+                if (Guid.TryParse(dealerIdString, out Guid dealerId))
+                {
+                    var orders = await _orderService.GetOrdersByDealerIdAsync(dealerId);
+                    ViewBag.BackController = "ManagerDashboard";
+                    return View(orders.ToPagedList(pageNumber, pageSize));
+                }
             }
+            else if (User.IsInRole("Dealer Staff"))
+            {
+                var staffIdString = User.FindFirstValue("AccountId");
+                if (Guid.TryParse(staffIdString, out Guid staffId))
+                {
+                    var orders = await _orderService.GetOrdersByStaffIdAsync(staffId);
+                    ViewBag.BackController = "SalesDashboard";
+                    return View(orders.ToPagedList(pageNumber, pageSize));
+                }
+            }
+
             return View(new List<Order>().ToPagedList(1, 10));
         }
+
 
         public async Task<IActionResult> Create()
         {
@@ -73,7 +90,11 @@ namespace EVDMS.Presentation.Controllers
                     await _orderService.CreateOrderAsync(newOrder);
 
                     TempData["SuccessMessage"] = "Đã tạo đơn hàng thành công!";
-                    return RedirectToAction(nameof(Index)); 
+
+                    if (User.IsInRole("Dealer Manager"))
+                        return RedirectToAction("Index", "ManagerDashboard");
+                    else
+                        return RedirectToAction("Index", "SalesDashboard");
                 }
             }
             catch (Exception ex)
