@@ -1,0 +1,109 @@
+﻿@model EVDMS.Core.Entities.VehicleModel
+@{
+    ViewData["Title"] = "Xác nhận xóa dòng xe";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-danger shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h2 class="mb-0"><i class="fas fa-exclamation-triangle me-2"></i>@ViewData["Title"]</h2>
+                </div>
+                
+                <div class="card-body">
+                    <p class="lead">Bạn đang chuẩn bị xóa (soft-delete) vĩnh viễn dòng xe sau khỏi hệ thống. Vui lòng xem kỹ thông tin và xác nhận.</p>
+                    
+                    <div class="mb-4">
+                        <h4 class="text-danger">Thông tin chi tiết dòng xe sẽ bị xóa:</h4>
+                        <div class="p-3 bg-light rounded border">
+                            <dl class="row mb-0">
+                                <dt class="col-sm-4">ID:</dt>
+                                <dd class="col-sm-8"><code>@Model.Id</code></dd>
+
+                                <dt class="col-sm-4">Tên dòng xe:</dt>
+                                <dd class="col-sm-8 fw-bold">@Model.ModelName</dd>
+                                
+                                <dt class="col-sm-4">Thương hiệu:</dt>
+                                <dd class="col-sm-8">@Model.Brand</dd>
+
+                                <dt class="col-sm-4">Năm sản xuất:</dt>
+                                <dd class="col-sm-8">@Model.ReleaseYear</dd>
+
+                                <dt class="col-sm-4">Loại xe:</dt>
+                                <dd class="col-sm-8">@Model.VehicleType</dd>
+                                
+                                @if(Model.VehicleConfig != null)
+                                {
+                                    <hr class="my-2">
+                                    <dt class="col-sm-4">Giá niêm yết:</dt>
+                                    <dd class="col-sm-8 text-success">@Model.VehicleConfig.BasePrice.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</dd>
+
+                                    <dt class="col-sm-4">Màu sắc:</dt>
+                                    <dd class="col-sm-8">@Model.VehicleConfig.Color</dd>
+                                }
+                            </dl>
+                        </div>
+                    </div>
+
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="Id" />
+
+                        <div class="mb-3">
+                            <label for="confirmText" class="form-label fw-bold">Để xác nhận, vui lòng nhập chính xác tên dòng xe <strong class="text-danger">"@Model.ModelName"</strong> vào ô bên dưới:</label>
+                            <input type="text" id="confirmText" class="form-control" aria-describedby="confirmHelp" autocomplete="off"/>
+                            <small id="confirmHelp" class="form-text text-muted">Hành động này giúp đảm bảo bạn không xóa nhầm dữ liệu quan trọng.</small>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-danger" id="deleteBtn" disabled>
+                                <i class="fas fa-trash-alt me-2"></i>Tôi hiểu và đồng ý xóa
+                            </button>
+                            <a asp-action="Index" class="btn btn-secondary">
+                                <i class="fas fa-times me-2"></i>Hủy bỏ
+                            </a>
+                        </div>
+                    </form>
+                </div>
+    <style>
+        #deleteBtn:disabled {
+            cursor: not-allowed;
+            opacity: 0.65;
+        }
+        .fw-bold {
+            font-weight: 600 !important;
+        }
+        code {
+            font-size: .875em;
+            color: #d63384;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // --- Element References ---
+            const confirmInput = document.getElementById('confirmText');
+            const deleteButton = document.getElementById('deleteBtn');
+            // The exact model name to match, passed from the server-side model
+            const modelNameToMatch = "@Model.ModelName";
+
+            // --- Logic to enable/disable the delete button ---
+            if (confirmInput && deleteButton) {
+                confirmInput.addEventListener('input', function() {
+                    // Check if the input value matches the model name exactly
+                    if (this.value === modelNameToMatch) {
+                        // If it matches, enable the button
+                        deleteButton.disabled = false;
+                        deleteButton.classList.remove('btn-danger');
+                        deleteButton.classList.add('btn-success');
+                    } else {
+                        // If it doesn't match, disable the button
+                        deleteButton.disabled = true;
+                        deleteButton.classList.add('btn-danger');
+                        deleteButton.classList.remove('btn-success');
+                    }
+                });
+            }
+        });
+    </script>
+}
