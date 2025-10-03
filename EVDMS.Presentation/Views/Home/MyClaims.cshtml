@@ -1,25 +1,105 @@
 ﻿@{
-    ViewData["Title"] = "Thông tin quyền của tôi";
+    ViewData["Title"] = "Thông tin định danh của tôi";
 }
 
-<h1>@ViewData["Title"]</h1>
+<style>
+    .claim-card {
+        background-color: #2c2c2c;
+        border: 1px solid #444;
+        border-radius: 10px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
 
-<p>Dưới đây là tất cả thông tin (claims) được lưu trong cookie của bạn sau khi đăng nhập.</p>
-
-<table class="table table-bordered">
-    <thead class="thead-light">
-        <tr>
-            <th>Loại (Type)</th>
-            <th>Giá trị (Value)</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var claim in User.Claims)
-        {
-            <tr>
-                <td>@claim.Type</td>
-                <td>@claim.Value</td>
-            </tr>
+        .claim-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 192, 224, 0.2);
         }
-    </tbody>
-</table>
+
+    .claim-icon {
+        font-size: 2rem;
+        color: #00c0e0;
+    }
+
+    .table-dark-custom {
+        background-color: #343a40;
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="text-center mb-5">
+        <h1 class="display-4">@ViewData["Title"]</h1>
+        <p class="lead text-muted">Đây là các thông tin được hệ thống ghi nhận về phiên đăng nhập của bạn.</p>
+    </div>
+
+    <div class="row mb-5">
+        @{
+            var nameClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name);
+            var roleClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Role);
+            var emailClaim = User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email);
+        }
+
+        @if (nameClaim != null)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="claim-card p-3 text-center h-100">
+                    <i class="fas fa-user-circle claim-icon mb-2"></i>
+                    <h5>Tên người dùng</h5>
+                    <p class="h4 text-light">@nameClaim.Value</p>
+                    <small class="text-muted">Tên hiển thị của bạn trong hệ thống.</small>
+                </div>
+            </div>
+        }
+
+        @if (roleClaim != null)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="claim-card p-3 text-center h-100">
+                    <i class="fas fa-user-shield claim-icon mb-2"></i>
+                    <h5>Vai trò</h5>
+                    <p class="h4 text-light">@roleClaim.Value</p>
+                    <small class="text-muted">Quyền hạn của bạn trong hệ thống.</small>
+                </div>
+            </div>
+        }
+
+        @if (emailClaim != null)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="claim-card p-3 text-center h-100">
+                    <i class="fas fa-envelope claim-icon mb-2"></i>
+                    <h5>Email</h5>
+                    <p class="h4 text-light">@emailClaim.Value</p>
+                    <small class="text-muted">Email đã đăng ký tài khoản.</small>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="card bg-dark border-secondary">
+        <div class="card-header">
+            <h4 class="mb-0">Tất cả thông tin (Claims) chi tiết</h4>
+        </div>
+        <div class="card-body">
+            <p>Dưới đây là tất cả thông tin (claims) được lưu trong cookie của bạn sau khi đăng nhập.</p>
+            <div class="table-responsive">
+                <table class="table table-bordered table-dark table-hover">
+                    <thead class="table-dark-custom">
+                        <tr>
+                            <th>Loại (Type)</th>
+                            <th>Giá trị (Value)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in User.Claims)
+                        {
+                            <tr>
+                                <td>@claim.Type</td>
+                                <td style="word-break:break-all;">@claim.Value</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
