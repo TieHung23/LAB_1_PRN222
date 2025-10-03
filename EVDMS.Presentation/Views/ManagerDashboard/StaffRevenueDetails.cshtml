@@ -1,73 +1,209 @@
 ﻿@model IEnumerable<(EVDMS.Core.Entities.Account Staff, decimal Revenue)>
 
 @{
-    ViewData["Title"] = "Doanh thu chi tiết nhân viên";
+    ViewData["Title"] = "Staff Revenue Details";
+    var topRevenue = Model.Any() ? Model.Max(x => x.Revenue) : 0;
+    var totalRevenue = Model.Sum(x => x.Revenue);
+    var avgRevenue = Model.Any() ? Model.Average(x => x.Revenue) : 0;
+    var activeStaffCount = Model.Count(x => x.Revenue > 0);
 }
 
 <div class="container mt-4">
-    <h1 class="display-4">@ViewData["Title"]</h1>
-    <p class="lead">Danh sách doanh thu của từng nhân viên trong đại lý</p>
-
-    <hr class="my-4">
-
-    <div class="card shadow mb-4">
-        <div class="card-header py-3 border-left-info">
-            <h6 class="m-0 font-weight-bold text-info">Chi tiết doanh thu nhân viên</h6>
-        </div>
-        <div class="card-body">
-            <table class="table table-hover table-bordered text-light">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>Tên nhân viên</th>
-                        <th>Tài khoản</th>
-                        <th>Doanh thu</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td>@item.Staff.FullName</td>
-                            <td>@item.Staff.UserName</td>
-                            <td class="text-success font-weight-bold">
-                                @item.Revenue.ToString("C0")
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="display-5 text-info"><i class="fas fa-users-cog"></i> @ViewData["Title"]</h1>
+        <div>
+            <a asp-controller="ManagerDashboard" asp-action="Index" class="btn btn-outline-light">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </a>
+            <button class="btn btn-success" onclick="exportTableToCSV()">📥 Export CSV</button>
         </div>
     </div>
 
-    <a asp-controller="ManagerDashboard" asp-action="Index" class="btn btn-secondary">
-        ← Quay lại Dashboard
-    </a>
+    <p class="lead">Detailed staff revenue statistics</p>
+    <hr class="my-4">
+
+    <!-- KPI Cards -->
+    <div class="row mb-4 text-center">
+        <div class="col-md-4">
+            <div class="card bg-dark text-light shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-white">Total Revenue</h6>
+                    <h3 class="text-success">@totalRevenue.ToString("C0")</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-light shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-white">Staff With Revenue</h6>
+                    <h3 class="text-info">@activeStaffCount</h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card bg-dark text-light shadow-sm border-0">
+                <div class="card-body">
+                    <h6 class="text-uppercase text-white">Average Revenue / Staff</h6>
+                    <h3 class="text-warning">@avgRevenue.ToString("C0")</h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Table -->
+    <div class="card shadow-lg mb-4 border-0 bg-dark text-light">
+        <div class="card-header py-3 text-white" style="background: linear-gradient(90deg,#00d9ff,#007bff);">
+            <i class="fas fa-chart-line"></i> Staff Revenue Details
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table id="staffTable" class="table mb-0 text-center align-middle revenue-table table-dark table-hover">
+                    <thead>
+                        <tr>
+                            <th>👤 Staff Name</th>
+                            <th>Account</th>
+                            <th>💰 Revenue</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr class="@(item.Revenue == topRevenue ? "top-performer" : "")">
+                                <td>
+                                    @item.Staff.FullName
+                                    @if (item.Revenue == topRevenue)
+                                    {
+                                        <span class="text-warning ms-2"><i class="fas fa-trophy"></i></span>
+                                    }
+                                </td>
+                                <td>@item.Staff.UserName</td>
+                                <td>
+                                    <span class="badge revenue-badge">
+                                        @item.Revenue.ToString("C0")
+                                    </span>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr class="table-summary">
+                            <td colspan="2" class="text-end"><strong>Total Revenue:</strong></td>
+                            <td><strong>@totalRevenue.ToString("C0")</strong></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card bg-dark text-light shadow-sm">
+                <div class="card-header"><i class="fas fa-chart-bar"></i> Revenue by Staff</div>
+                <div class="card-body"><canvas id="barChart" height="150"></canvas></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-dark text-light shadow-sm">
+                <div class="card-header"><i class="fas fa-chart-pie"></i> Revenue Share</div>
+                <div class="card-body"><canvas id="pieChart" height="150"></canvas></div>
+            </div>
+        </div>
+    </div>
 </div>
 
 @section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Chart Data
+        var labels = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(x => x.Staff.FullName)));
+        var revenues = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(x => x.Revenue)));
+
+        // Bar Chart
+        new Chart(document.getElementById("barChart"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{ label: "Revenue", data: revenues, backgroundColor: '#00d9ff' }]
+            },
+            options: { plugins: { legend: { labels: { color: '#f8f9fa' } } }, scales: { x: { ticks: { color:'#f8f9fa' } }, y: { ticks: { color:'#f8f9fa' } } } }
+        });
+
+        // Pie Chart
+        new Chart(document.getElementById("pieChart"), {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{ data: revenues, backgroundColor: ['#00d9ff','#007bff','#28a745','#ffc107','#dc3545'] }]
+            },
+            options: { plugins: { legend: { labels: { color: '#f8f9fa' } } } }
+        });
+
+        // Export CSV
+        function exportTableToCSV() {
+            let csv = [];
+            let rows = document.querySelectorAll("#staffTable tr");
+            rows.forEach(row => {
+                let cols = row.querySelectorAll("td, th");
+                let data = Array.from(cols).map(c => c.innerText);
+                csv.push(data.join(","));
+            });
+            let blob = new Blob([csv.join("\n")], { type: "text/csv" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "StaffRevenue.csv";
+            link.click();
+        }
+    </script>
+
     <style>
+        /* General Dark Theme */
         body {
             background-color: #2c2c2c;
             color: #f8f9fa;
         }
 
         .card {
-            background-color: #343a40;
             border: 1px solid #444;
-            color: #f8f9fa;
         }
 
-        .border-left-info {
-            border-left: .25rem solid #00d9ff !important;
+        .btn-outline-light:hover {
+            background: #00d9ff;
+            color: #fff;
         }
 
-        .table-hover tbody tr:hover {
-            background-color: #3a3f47;
+        /* Table Dark Theme */
+        .revenue-table thead {
+            background: #1f1f1f;
+            color: #00d9ff;
+            font-weight: bold;
+            font-size: 1rem;
         }
 
-        .thead-dark {
-            background-color: #444;
-            color: #f8f9fa;
+        .revenue-table tbody tr:hover {
+            background: #3a3f47;
+        }
+
+        .revenue-table tfoot {
+            background: #1a2a3a;
+            color: #00d9ff;
+            font-weight: bold;
+        }
+
+        .revenue-table .top-performer {
+            background: #243b29 !important;
+        }
+
+        /* Badge Styling */
+        .revenue-badge {
+            background: linear-gradient(90deg,#28a745,#34d058);
+            color: #fff;
+            font-size: 1rem;
+            padding: .5em 1em;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,.3);
         }
     </style>
 }

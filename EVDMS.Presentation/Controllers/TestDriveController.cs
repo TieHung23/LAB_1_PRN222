@@ -4,6 +4,7 @@ using EVDMS.Presentation.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using X.PagedList.Extensions;
 using X.PagedList;
@@ -23,11 +24,25 @@ namespace EVDMS.Presentation.Controllers
             _customerService = customerService;
             _vehicleModelService = vehicleModelService;
         }
+
         public async Task<IActionResult> Index(int? page)
         {
             var testDrives = await _testDriveService.GetAllAsync();
-            int pageNumber = page ?? 1; 
-            int pageSize = 5; 
+            int pageNumber = page ?? 1;
+            int pageSize = 5;
+
+            if (User.IsInRole("Dealer Manager"))
+            {
+                ViewBag.BackController = "ManagerDashboard";
+            }
+            else if (User.IsInRole("Dealer Staff"))
+            {
+                ViewBag.BackController = "SalesDashboard";
+            }
+            else
+            {
+                ViewBag.BackController = "Home";
+            }
 
             return View(testDrives.ToPagedList(pageNumber, pageSize));
         }
@@ -52,7 +67,13 @@ namespace EVDMS.Presentation.Controllers
                     ScheduledDateTime = model.ScheduledDateTime
                 };
                 await _testDriveService.CreateTestDriveAsync(testDrive);
-                return RedirectToAction(nameof(Index)); 
+
+                if (User.IsInRole("Dealer Manager"))
+                    return RedirectToAction("Index", "ManagerDashboard");
+                else if (User.IsInRole("Dealer Staff"))
+                    return RedirectToAction("Index", "SalesDashboard");
+                else
+                    return RedirectToAction(nameof(Index));
             }
             ViewBag.Customers = new SelectList(await _customerService.GetAllAsync(), "Id", "FullName", model.CustomerId);
             ViewBag.VehicleModels = new SelectList(await _vehicleModelService.GetAllAsync(null), "Id", "ModelName", model.VehicleModelId);
