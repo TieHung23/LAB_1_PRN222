@@ -1,6 +1,7 @@
 ﻿using EVDMS.BLL.Services.Abstractions;
 using EVDMS.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
+using EVDMS.Presentation.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc;
 using X.PagedList;
@@ -39,16 +40,44 @@ namespace EVDMS.Presentation.Controllers
             return View(vehicle);
         }
 
+        public IActionResult Create()
+        {
+            return View(new CreateVehicleViewModel());
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(VehicleModel vehicleModel)
+        public async Task<IActionResult> Create(CreateVehicleViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
-                await _vehicleModelService.CreateAsync(vehicleModel);
+                // Tạo đối tượng VehicleConfig từ ViewModel
+                var newVehicleConfig = new VehicleConfig
+                {
+                    BasePrice = viewModel.BasePrice,
+                    WarrantyPeriod = viewModel.WarrantyPeriod,
+                    VersionName = "Standard", // Gán giá trị mặc định
+                    Color = "Default",      // Gán giá trị mặc định
+                    InteriorType = "Standard" // Gán giá trị mặc định
+                };
+
+                // Tạo đối tượng VehicleModel từ ViewModel
+                var newVehicleModel = new VehicleModel
+                {
+                    ModelName = viewModel.ModelName,
+                    Brand = viewModel.Brand,
+                    VehicleType = viewModel.VehicleType,
+                    Description = viewModel.Description,
+                    ImgUrl = viewModel.ImgUrl,
+                    ReleaseYear = viewModel.ReleaseYear,
+                    IsActive = viewModel.IsActive,
+                    VehicleConfig = newVehicleConfig // Gán Config vào Model
+                };
+
+                await _vehicleModelService.CreateAsync(newVehicleModel);
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehicleModel);
+            return View(viewModel);
         }
 
         // GET: Vehicle/Edit/{id}

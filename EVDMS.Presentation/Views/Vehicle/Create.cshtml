@@ -1,4 +1,4 @@
-﻿@model EVDMS.Core.Entities.VehicleModel
+﻿@model EVDMS.Presentation.Models.ViewModels.CreateVehicleViewModel
 @{
     ViewData["Title"] = "Thêm mới dòng xe";
     ViewData["SubTitle"] = "Nhập thông tin chi tiết cho một dòng xe mới vào hệ thống.";
@@ -18,148 +18,91 @@
                         <h5 class="mb-0"><i class="fas fa-car me-2"></i>Thông tin cơ bản</h5>
                     </div>
                     <div class="card-body">
-                        <p class="card-text text-muted mb-4">Các thông tin định danh chính của dòng xe.</p>
-
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
-                            <strong>Lỗi!</strong> Vui lòng kiểm tra lại các thông tin đã nhập.
-                        </div>
-
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="ModelName" class="form-label fw-bold">Tên dòng xe</label>
-                                <input asp-for="ModelName" class="form-control form-control-lg" placeholder="Ví dụ: Vinfast VF8" required aria-describedby="modelNameHelp" />
-                                <small id="modelNameHelp" class="form-text text-muted">Tên thương mại của dòng xe.</small>
-                                <div class="invalid-feedback">
-                                    Vui lòng nhập tên dòng xe.
-                                </div>
+                                <label asp-for="ModelName" class="form-label fw-bold"></label>
+                                <input asp-for="ModelName" class="form-control" required>
+                                <div class="invalid-feedback"><span asp-validation-for="ModelName"></span></div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="Brand" class="form-label fw-bold">Thương hiệu</label>
-                                <input asp-for="Brand" class="form-control form-control-lg" placeholder="Ví dụ: Vinfast" required aria-describedby="brandHelp" />
-                                <small id="brandHelp" class="form-text text-muted">Thương hiệu sản xuất.</small>
-                                <div class="invalid-feedback">
-                                    Vui lòng nhập thương hiệu.
-                                </div>
+                                <label asp-for="Brand" class="form-label fw-bold"></label>
+                                <input asp-for="Brand" class="form-control" required>
+                                <div class="invalid-feedback"><span asp-validation-for="Brand"></span></div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Thông số kỹ thuật</h5>
-                    </div>
-                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="VehicleType" class="form-label fw-bold">Loại xe</label>
-                                <select asp-for="VehicleType" class="form-select" aria-describedby="vehicleTypeHelp">
-                                    <option value="">-- Chọn loại xe --</option>
-                                    <option value="SUV">SUV</option>
-                                    <option value="Sedan">Sedan</option>
-                                    <option value="Hatchback">Hatchback</option>
-                                    <option value="Crossover">Crossover</option>
-                                    <option value="Pickup Truck">Pickup Truck</option>
-                                </select>
-                                <small id="vehicleTypeHelp" class="form-text text-muted">Phân loại xe (SUV, Sedan, v.v.).</small>
+                                <label asp-for="VehicleType" class="form-label fw-bold"></label>
+                                <input asp-for="VehicleType" class="form-control" required>
+                                <div class="invalid-feedback"><span asp-validation-for="VehicleType"></span></div>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="ReleaseYear" class="form-label fw-bold">Năm sản xuất</label>
-                                <input asp-for="ReleaseYear" class="form-control" type="number" min="1990" max="2099" placeholder="YYYY" required aria-describedby="releaseYearHelp" />
-                                <small id="releaseYearHelp" class="form-text text-muted">Năm dòng xe được ra mắt.</small>
-                                <div class="invalid-feedback">
-                                    Năm sản xuất không hợp lệ (từ 1990).
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-dollar-sign me-2"></i>Cấu hình và Giá bán</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="VehicleConfig.BasePrice" class="form-label fw-bold">Giá niêm yết (VNĐ)</label>
-                                <input asp-for="VehicleConfig.BasePrice" class="form-control" type="number" min="0" step="1000000" placeholder="Ví dụ: 1100000000" aria-describedby="priceHelp" />
-                                <small id="priceHelp" class="form-text text-muted">Giá bán cơ bản chưa bao gồm tùy chọn.</small>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="VehicleConfig.Color" class="form-label fw-bold">Màu sắc mặc định</label>
-                                <input asp-for="VehicleConfig.Color" class="form-control" placeholder="Ví dụ: Trắng, Đen, Đỏ" aria-describedby="colorHelp" />
-                                <small id="colorHelp" class="form-text text-muted">Màu sắc phổ biến nhất của dòng xe.</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-file-alt me-2"></i>Mô tả & Hình ảnh</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="mb-3">
-                            <label asp-for="Description" class="form-label fw-bold">Mô tả chi tiết</label>
-                            <textarea asp-for="Description" class="form-control" rows="5" placeholder="Nhập mô tả chi tiết, các tính năng nổi bật của xe..." aria-describedby="descriptionHelp" id="descriptionTextarea"></textarea>
-                            <div class="d-flex justify-content-between">
-                                <small id="descriptionHelp" class="form-text text-muted">Nội dung marketing, giới thiệu về xe.</small>
-                                <small id="charCounter" class="form-text text-muted">0 ký tự</small>
+                                <label asp-for="ReleaseYear" class="form-label fw-bold"></label>
+                                <input asp-for="ReleaseYear" type="number" class="form-control" required>
+                                <div class="invalid-feedback"><span asp-validation-for="ReleaseYear"></span></div>
                             </div>
                         </div>
                         <div class="mb-3">
-                            <label asp-for="ImgUrl" class="form-label fw-bold">URL Hình ảnh</label>
-                            <input asp-for="ImgUrl" class="form-control" placeholder="https://example.com/image.png" aria-describedby="imgUrlHelp" id="imgUrlInput" />
-                            <small id="imgUrlHelp" class="form-text text-muted">Đường dẫn đến ảnh đại diện của xe.</small>
+                            <label asp-for="ImgUrl" class="form-label fw-bold"></label>
+                            <input asp-for="ImgUrl" type="url" class="form-control" id="imageUrlInput">
+                            <div class="invalid-feedback"><span asp-validation-for="ImgUrl"></span></div>
+                        </div>
+                        <div class="mb-3">
+                            <label asp-for="Description" class="form-label fw-bold"></label>
+                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-dollar-sign me-2"></i>Giá và Bảo hành</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="BasePrice" class="form-label fw-bold"></label>
+                                <input asp-for="BasePrice" type="number" class="form-control" required>
+                                <div class="invalid-feedback"><span asp-validation-for="BasePrice"></span></div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="WarrantyPeriod" class="form-label fw-bold"></label>
+                                <input asp-for="WarrantyPeriod" type="number" class="form-control" required>
+                                <div class="invalid-feedback"><span asp-validation-for="WarrantyPeriod"></span></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="col-lg-4">
-                <div class="card shadow-sm mb-4 sticky-top" style="top: 20px;">
+                <div class="card shadow-sm mb-4">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-play-circle me-2"></i>Hành động</h5>
+                        <h5 class="mb-0"><i class="fas fa-cogs me-2"></i>Hành động</h5>
                     </div>
                     <div class="card-body">
-                        <p>Vui lòng kiểm tra kỹ thông tin trước khi lưu.</p>
+                        <div class="form-check form-switch mb-3">
+                            <input asp-for="IsActive" class="form-check-input">
+                            <label asp-for="IsActive" class="form-check-label"></label>
+                        </div>
                         <div class="d-grid gap-2">
-                            <button type="button" class="btn btn-primary btn-lg" id="submitBtn"><i class="fas fa-save me-2"></i>Lưu và Tạo mới</button>
-                            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-times me-2"></i>Hủy bỏ</a>
+                            <button type="button" class="btn btn-primary btn-lg" id="submitBtn"><i class="fas fa-save me-2"></i>Lưu lại</button>
+                            <a asp-action="Index" class="btn btn-secondary"><i class="fas fa-arrow-left me-2"></i>Quay về danh sách</a>
                         </div>
                     </div>
                 </div>
-
-                <div class="card shadow-sm mb-4">
+                <div class="card shadow-sm">
                     <div class="card-header">
-                        <h5 class="mb-0"><i class="fas fa-image me-2"></i>Xem trước hình ảnh</h5>
+                        <h5 class="mb-0"><i class="fas fa-image me-2"></i>Xem trước ảnh</h5>
                     </div>
                     <div class="card-body text-center">
-                        <img id="imagePreview" src="https://via.placeholder.com/400x250.png?text=Image+Preview" alt="Image Preview" class="img-fluid rounded" style="max-height: 250px; object-fit: cover;" />
+                        <img id="imagePreview" src="https://via.placeholder.com/300x200.png?text=Image+Preview" class="img-fluid rounded" alt="Image preview">
                     </div>
                 </div>
             </div>
         </div>
     </form>
-</div>
-
-<div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="confirmationModalLabel">Xác nhận tạo mới</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                Bạn có chắc chắn muốn tạo mới dòng xe này với các thông tin đã nhập không?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Không, xem lại</button>
-                <button type="button" class="btn btn-primary" id="confirmCreateBtn">Có, tạo ngay</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 @section Scripts {
