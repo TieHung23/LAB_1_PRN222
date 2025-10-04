@@ -152,29 +152,38 @@
 <script>document.body.classList.add('login-body');</script>
 
 <div class="login-container">
-    <div class="login-card">
+    <section class="login-card">
         <div class="login-header">
-            <div class="logo-icon">
-                <i class="fas fa-bolt"></i>
-            </div>
-            <h2>Chào mừng đến với Cortexa</h2>
-            <p class="text-muted">Đăng nhập để tiếp tục</p>
+            <img src="~/images/logo.png" alt="EVDMS Logo" class="login-logo" />
+            <h1 class="h2">@ViewData["Title"]</h1>
+            <p class="text-muted">Chào mừng trở lại! Vui lòng đăng nhập để tiếp tục.</p>
         </div>
+
         <section>
             <form id="account" method="post">
                 <div asp-validation-summary="ModelOnly" class="alert alert-danger text-center p-2 mb-3" role="alert"></div>
 
-                <div class="mb-3 input-group-with-icon">
-                    [cite_start]<input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Tên đăng nhập" /> [cite: 3]
-                    <i class="fas fa-user input-icon"></i>
+                @* --- BẮT ĐẦU THAY ĐỔI --- *@
+                <div class="mb-3">
+                    @* 1. Thêm Label, nó sẽ tự động lấy tên từ ViewModel *@
+                    <label asp-for="UserName" class="form-label"></label>
+                    <div class="input-group-with-icon">
+                        <input asp-for="UserName" class="form-control" autocomplete="username" aria-required="true" placeholder="Nhập tên đăng nhập của bạn" />
+                        <i class="fas fa-user input-icon"></i>
+                    </div>
                     <span asp-validation-for="UserName" class="text-danger small mt-1"></span>
                 </div>
 
-                <div class="mb-4 input-group-with-icon">
-                    <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Mật khẩu" />
-                    <i class="fas fa-lock input-icon"></i>
+                <div class="mb-4">
+                    @* 2. Thêm Label, nó sẽ tự động lấy tên từ ViewModel *@
+                    <label asp-for="Password" class="form-label"></label>
+                    <div class="input-group-with-icon">
+                        <input asp-for="Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" placeholder="Nhập mật khẩu của bạn" />
+                        <i class="fas fa-lock input-icon"></i>
+                    </div>
                     <span asp-validation-for="Password" class="text-danger small mt-1"></span>
                 </div>
+                @* --- KẾT THÚC THAY ĐỔI --- *@
 
                 <div class="d-grid">
                     <button id="login-submit" type="submit" class="btn btn-primary btn-lg">Đăng nhập</button>
@@ -187,7 +196,7 @@
                 <i class="fas fa-arrow-left me-1"></i> Quay về trang chủ
             </a>
         </div>
-    </div>
+    </section>
 </div>
 
 @section Scripts {

@@ -3,13 +3,11 @@ using EVDMS.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using EVDMS.Presentation.Models.ViewModels;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc;
-using X.PagedList;
 using X.PagedList.Extensions;
 
 namespace EVDMS.Presentation.Controllers
 {
-    [Authorize(Roles = "Dealer Manager,Dealer Staff")]
+    [Authorize]
     public class VehicleController : Controller
     {
         private readonly IVehicleModelService _vehicleModelService;
@@ -40,6 +38,7 @@ namespace EVDMS.Presentation.Controllers
             return View(vehicle);
         }
 
+        [Authorize(Roles = "Dealer Manager,Dealer Staff")]
         public IActionResult Create()
         {
             return View(new CreateVehicleViewModel());
@@ -47,6 +46,7 @@ namespace EVDMS.Presentation.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Dealer Manager,Dealer Staff")]
         public async Task<IActionResult> Create(CreateVehicleViewModel viewModel)
         {
             if (ModelState.IsValid)
@@ -81,6 +81,7 @@ namespace EVDMS.Presentation.Controllers
         }
 
         // GET: Vehicle/Edit/{id}
+        [Authorize(Roles = "Dealer Manager,Dealer Staff")]
         public async Task<IActionResult> Edit(Guid id)
         {
             var vehicle = await _vehicleModelService.GetByIdAsync(id);
@@ -111,6 +112,7 @@ namespace EVDMS.Presentation.Controllers
         // POST: Vehicle/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Dealer Manager,Dealer Staff")]
         public async Task<IActionResult> Edit(Guid id, EditVehicleViewModel viewModel)
         {
             if (id != viewModel.Id)
@@ -157,6 +159,7 @@ namespace EVDMS.Presentation.Controllers
         }
 
         // GET: Vehicle/Delete/{id}
+        [Authorize(Roles = "Dealer Manager,Dealer Staff")]
         public async Task<IActionResult> Delete(Guid id)
         {
             var vehicle = await _vehicleModelService.GetByIdAsync(id);
@@ -168,6 +171,7 @@ namespace EVDMS.Presentation.Controllers
         }
 
         // POST: Vehicle/Delete/{id}
+        [Authorize(Roles = "Dealer Manager,Dealer Staff")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(Guid id)
