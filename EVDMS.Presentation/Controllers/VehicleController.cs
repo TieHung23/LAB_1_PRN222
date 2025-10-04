@@ -84,19 +84,36 @@ namespace EVDMS.Presentation.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             var vehicle = await _vehicleModelService.GetByIdAsync(id);
-            if (vehicle == null)
+            if (vehicle == null || vehicle.VehicleConfig == null)
             {
                 return NotFound();
             }
-            return View(vehicle);
+
+            // Ánh xạ (Map) từ Entity Model sang EditVehicleViewModel
+            var viewModel = new EditVehicleViewModel
+            {
+                Id = vehicle.Id,
+                VehicleConfigId = vehicle.VehicleConfigId,
+                ModelName = vehicle.ModelName,
+                Brand = vehicle.Brand,
+                VehicleType = vehicle.VehicleType,
+                Description = vehicle.Description,
+                ImgUrl = vehicle.ImgUrl,
+                ReleaseYear = vehicle.ReleaseYear,
+                IsActive = vehicle.IsActive,
+                BasePrice = vehicle.VehicleConfig.BasePrice,
+                WarrantyPeriod = vehicle.VehicleConfig.WarrantyPeriod
+            };
+
+            return View(viewModel);
         }
 
         // POST: Vehicle/Edit/{id}
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, VehicleModel vehicleModel)
+        public async Task<IActionResult> Edit(Guid id, EditVehicleViewModel viewModel)
         {
-            if (id != vehicleModel.Id)
+            if (id != viewModel.Id)
             {
                 return NotFound();
             }
@@ -105,17 +122,38 @@ namespace EVDMS.Presentation.Controllers
             {
                 try
                 {
-                    await _vehicleModelService.UpdateAsync(vehicleModel);
+                    // 1. Lấy bản ghi gốc từ database
+                    var vehicleToUpdate = await _vehicleModelService.GetByIdAsync(viewModel.Id);
+                    if (vehicleToUpdate == null || vehicleToUpdate.VehicleConfig == null)
+                    {
+                        return NotFound();
+                    }
+
+                    // 2. Cập nhật lại dữ liệu từ ViewModel vào bản ghi gốc
+                    vehicleToUpdate.ModelName = viewModel.ModelName;
+                    vehicleToUpdate.Brand = viewModel.Brand;
+                    vehicleToUpdate.VehicleType = viewModel.VehicleType;
+                    vehicleToUpdate.Description = viewModel.Description;
+                    vehicleToUpdate.ImgUrl = viewModel.ImgUrl;
+                    vehicleToUpdate.ReleaseYear = viewModel.ReleaseYear;
+                    vehicleToUpdate.IsActive = viewModel.IsActive;
+
+                    // Cập nhật cả thông tin của VehicleConfig liên quan
+                    vehicleToUpdate.VehicleConfig.BasePrice = viewModel.BasePrice;
+                    vehicleToUpdate.VehicleConfig.WarrantyPeriod = viewModel.WarrantyPeriod;
+
+                    // 3. Gọi service để lưu thay đổi
+                    await _vehicleModelService.UpdateAsync(vehicleToUpdate);
                 }
                 catch (Exception)
                 {
-                    // Có thể thêm logic kiểm tra xem bản ghi có còn tồn tại không
-                    // hoặc xử lý lỗi concurrency tại đây
+                    // Xử lý lỗi concurrency (nếu cần)
                     throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(vehicleModel);
+            // Nếu có lỗi, trả về view với dữ liệu người dùng đã nhập
+            return View(viewModel);
         }
 
         // GET: Vehicle/Delete/{id}
